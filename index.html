@@ -15,8 +15,8 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 #welcome{justify-content:center;text-align:center}
 #welcome h1{font-size:2.2em;margin-bottom:6px;background:linear-gradient(135deg,var(--pink2),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 #welcome .sub{color:#888;margin-bottom:28px;font-size:1em}
-.cat-picker{display:flex;gap:16px;justify-content:center;margin-bottom:28px;flex-wrap:wrap}
-.cat-option{width:110px;height:130px;border:3px solid #eee;border-radius:24px;cursor:pointer;transition:all .3s;background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;box-shadow:var(--shadow)}
+.cat-picker{display:flex;justify-content:center;margin-bottom:28px;flex-wrap:wrap}
+.cat-option{width:110px;height:130px;border:3px solid #eee;border-radius:24px;cursor:pointer;transition:all .3s;background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:var(--shadow)}
 .cat-option:hover,.cat-option.selected{border-color:var(--pink);transform:scale(1.06);box-shadow:0 6px 25px rgba(255,143,171,.3)}
 .cat-option .cat-label{font-size:.8em;color:#888;font-weight:600}
 .name-input{padding:12px 20px;font-size:1.1em;border:2px solid #eee;border-radius:14px;width:260px;text-align:center;outline:none;margin-bottom:20px;transition:border .2s}
@@ -207,7 +207,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 .action-btn .count{font-size:.7em;color:#aaa;margin-top:2px}
 .action-btn:disabled{opacity:.35;cursor:not-allowed}
 .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;margin-bottom:20px}
-.menu-btn{background:var(--card);border:none;border-radius:16px;padding:14px 8px;cursor:pointer;font-weight:700;font-size:.9em;transition:all .2s;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;gap:4px}
+.menu-btn{background:var(--card);border:none;border-radius:16px;padding:14px 8px;cursor:pointer;font-weight:700;font-size:.9em;transition:all .2s;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center}
 .menu-btn:active{transform:scale(.96)}
 .menu-btn .menu-icon{font-size:24px}
 
@@ -235,10 +235,10 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 .quiz-opt.wrong{border-color:var(--danger);background:#ffe6ec;color:var(--danger)}
 
 /* 24 POINT */
-.p24-cards{display:flex;gap:10px;justify-content:center;margin:16px 0}
+.p24-cards{display:flex;justify-content:center;margin:16px 0}
 .p24-card{width:60px;height:80px;background:linear-gradient(135deg,#fff,#f8f8ff);border:2.5px solid var(--pink);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.6em;font-weight:800;box-shadow:0 4px 15px rgba(255,143,171,.2)}
 .p24-calculator{margin-top:12px}
-.p24-display{background:var(--card);border-radius:12px;padding:12px;text-align:center;font-size:1.3em;font-weight:700;min-height:48px;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 2px 4px rgba(0,0,0,.06);margin-bottom:10px;letter-spacing:2px;word-break:break-all;flex-wrap:wrap;gap:4px}
+.p24-display{background:var(--card);border-radius:12px;padding:12px;text-align:center;font-size:1.3em;font-weight:700;min-height:48px;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 2px 4px rgba(0,0,0,.06);margin-bottom:10px;letter-spacing:2px;word-break:break-all;flex-wrap:wrap}
 .p24-display .token{display:inline-block;padding:2px 6px;border-radius:6px}
 .p24-display .num-token{background:var(--blue);color:var(--text)}
 .p24-display .op-token{background:var(--pink);color:#fff}
@@ -284,11 +284,11 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 .cat-detail .detail-name{font-size:1.2em;font-weight:800;margin-top:8px}
 .cat-detail .detail-breed{color:#888;font-size:.9em;margin:4px 0}
 .cat-detail .detail-unlock{color:var(--pink);font-size:.85em;margin:8px 0}
-.cat-detail .detail-actions{display:flex;gap:8px;justify-content:center;margin-top:14px}
+.cat-detail .detail-actions{display:flex;justify-content:center;margin-top:14px}
 
 /* GUIDE MODAL */
 .guide-section{background:var(--card);border-radius:14px;padding:14px 16px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
-.guide-section h3{font-size:.95em;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.guide-section h3{font-size:.95em;margin-bottom:6px;display:flex;align-items:center}
 .guide-section p{font-size:.82em;color:#666;line-height:1.6}
 .guide-section .highlight{color:var(--pink2);font-weight:700}
 
@@ -297,6 +297,21 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 .toast.show{transform:translateX(-50%) translateY(0)}
 
 @media(max-width:380px){.action-grid{gap:8px}.p24-key{padding:10px 2px;font-size:.9em}}
+/* ===== iOS < 14.5 flex gap fallback ===== */
+.cat-option+.cat-option{margin-left:16px}
+.cat-option>*+*{margin-top:4px}
+.menu-btn>*+*{margin-top:4px}
+.p24-card+.p24-card{margin-left:10px}
+.p24-display>*+*{margin-left:4px}
+.cat-detail .detail-actions>*+*{margin-left:8px}
+.guide-section h3>*+*{margin-left:6px}
+/* ===== end flex gap fallback ===== */
+/* ===== iOS touch and scroll fixes ===== */
+html{-webkit-text-size-adjust:100%}
+body{-webkit-overflow-scrolling:touch}
+.modal-body{overflow-y:auto;-webkit-overflow-scrolling:touch}
+.btn,.action-btn,.menu-btn,.cat-option,.quiz-opt,.p24-key,.collection-item,.p24-card{touch-action:manipulation}
+/* ===== end iOS fixes ===== */
 </style>
 </head>
 <body>
@@ -431,7 +446,7 @@ const MOODS={
 // ===== STATE =====
 let S={started:false,cat:{name:'',type:'orange'},level:1,growth:0,food:0,water:0,treats:0,baths:0,daily:{checkin:false,quiz24:0,quizMul10:0,quizMul19:0},towerBest:0,towerCurrent:0,unlocked:['orange','black','white','grey'],activeCat:'orange',lastDate:''};
 function load(){try{const s=localStorage.getItem('catGame2');if(s)S=JSON.parse(s)}catch(e){}}
-function save(){localStorage.setItem('catGame2',JSON.stringify(S))}
+function save(){try{localStorage.setItem('catGame2',JSON.stringify(S))}catch(e){}}
 load();
 
 function checkDay(){const t=new Date().toLocaleDateString();if(S.lastDate!==t){S.daily={checkin:false,quiz24:0,quizMul10:0,quizMul19:0};S.lastDate=t;save()}}
