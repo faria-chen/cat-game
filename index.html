@@ -8,8 +8,6 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{--bg:#fef9ef;--card:#fff;--pink:#ff8fab;--pink2:#ff5c8a;--blue:#a2d2ff;--mint:#b8e0d2;--gold:#ffd166;--orange:#f4845f;--text:#2b2d42;--success:#06d6a0;--danger:#ef476f;--shadow:0 4px 20px rgba(0,0,0,.08)}
 body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-
-/* SCREENS */
 .screen{display:none;min-height:100vh;padding:20px 16px}
 .screen.active{display:flex;flex-direction:column;align-items:center}
 
@@ -25,7 +23,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 .name-input:focus{border-color:var(--pink)}
 .btn{padding:12px 32px;font-size:1em;border:none;border-radius:14px;cursor:pointer;font-weight:700;transition:all .2s;letter-spacing:.5px}
 .btn-primary{background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;box-shadow:0 4px 15px rgba(255,92,138,.3)}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,92,138,.4)}
+.btn-primary:hover{transform:translateY(-2px)}
 .btn-primary:disabled{background:#ccc;box-shadow:none;cursor:not-allowed;transform:none}
 .btn-sm{padding:8px 16px;font-size:.85em;border-radius:10px}
 .btn-secondary{background:var(--blue);color:var(--text)}
@@ -37,19 +35,16 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 .css-cat.stage-1{transform:scale(.7)}
 .css-cat.stage-2{transform:scale(1)}
 .css-cat.stage-3{transform:scale(1.25)}
-.cat-body-wrap{position:relative;width:100px;height:100px}
+.cat-body-wrap{position:relative;width:100px;height:100px;animation:catIdle 2.5s ease-in-out infinite}
 .cat-body{width:80px;height:70px;border-radius:50% 50% 45% 45%;position:absolute;bottom:0;left:10px}
 .cat-head{width:65px;height:55px;border-radius:50% 50% 45% 45%;position:absolute;top:0;left:17.5px;z-index:2}
-.cat-ear{width:0;height:0;position:absolute;top:-8px;z-index:3}
-.cat-ear-l{left:14px;border-left:12px solid transparent;border-right:12px solid transparent;border-bottom:20px solid}
-.cat-ear-r{right:14px;border-left:12px solid transparent;border-right:12px solid transparent;border-bottom:20px solid}
-.cat-ear-inner{width:0;height:0;position:absolute;top:-4px;z-index:4}
-.cat-ear-inner-l{left:18px;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:13px solid}
-.cat-ear-inner-r{right:18px;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:13px solid}
+.cat-ear-l{left:14px;border-left:12px solid transparent;border-right:12px solid transparent;border-bottom:20px solid;position:absolute;top:-8px;z-index:3}
+.cat-ear-r{right:14px;border-left:12px solid transparent;border-right:12px solid transparent;border-bottom:20px solid;position:absolute;top:-8px;z-index:3}
+.cat-ear-inner-l{left:18px;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:13px solid;position:absolute;top:-4px;z-index:4}
+.cat-ear-inner-r{right:18px;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:13px solid;position:absolute;top:-4px;z-index:4}
 .cat-eye{width:12px;height:14px;background:#2b2d42;border-radius:50%;position:absolute;top:22px;z-index:5}
 .cat-eye::after{content:'';width:4px;height:4px;background:#fff;border-radius:50%;position:absolute;top:3px;right:2px}
-.cat-eye-l{left:28px}
-.cat-eye-r{right:28px}
+.cat-eye-l{left:28px}.cat-eye-r{right:28px}
 .cat-nose{width:7px;height:5px;background:var(--pink2);border-radius:50% 50% 40% 40%;position:absolute;top:34px;left:50%;transform:translateX(-50%);z-index:5}
 .cat-mouth{position:absolute;top:38px;left:50%;transform:translateX(-50%);z-index:5}
 .cat-mouth::before,.cat-mouth::after{content:'';width:8px;height:5px;border-bottom:2px solid #999;border-radius:0 0 50% 50%;position:absolute;top:0}
@@ -63,16 +58,14 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 .cat-tail{width:40px;height:8px;border-radius:0 8px 8px 0;position:absolute;bottom:15px;right:-25px;transform-origin:left center;animation:tailWag 2s ease-in-out infinite;z-index:1}
 @keyframes tailWag{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(15deg)}}
 .cat-paw{width:16px;height:12px;border-radius:50%;position:absolute;bottom:-4px;z-index:3}
-.cat-paw-l{left:18px}
-.cat-paw-r{right:18px}
+.cat-paw-l{left:18px}.cat-paw-r{right:18px}
 .crown-wrap{position:absolute;top:-30px;left:50%;transform:translateX(-50%);z-index:10;font-size:28px;animation:crownFloat 2s ease-in-out infinite}
 @keyframes crownFloat{0%,100%{transform:translateX(-50%) translateY(0) rotate(-3deg)}50%{transform:translateX(-50%) translateY(-6px) rotate(3deg)}}
 @keyframes catBounce{0%{transform:translateY(0)}30%{transform:translateY(-15px)}50%{transform:translateY(0)}70%{transform:translateY(-8px)}100%{transform:translateY(0)}}
 .css-cat.bounce{animation:catBounce .5s ease}
 @keyframes catIdle{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-.cat-body-wrap{animation:catIdle 2.5s ease-in-out infinite}
 
-/* Color themes */
+/* ===== BASIC CAT THEMES ===== */
 .theme-orange .cat-body,.theme-orange .cat-head{background:#f4a261}
 .theme-orange .cat-ear-l,.theme-orange .cat-ear-r{border-bottom-color:#f4a261}
 .theme-orange .cat-ear-inner-l,.theme-orange .cat-ear-inner-r{border-bottom-color:#ffb4a2}
@@ -97,71 +90,89 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 .theme-grey .cat-tail{background:#9aa0a8}
 .theme-grey .cat-paw{background:#9aa0a8}
 
-.theme-siamese .cat-body,.theme-siamese .cat-head{background:#f5e6ca}
-.theme-siamese .cat-ear-l,.theme-siamese .cat-ear-r{border-bottom-color:#8b6f4e}
-.theme-siamese .cat-ear-inner-l,.theme-siamese .cat-ear-inner-r{border-bottom-color:#c9a87c}
-.theme-siamese .cat-tail{background:#8b6f4e}
-.theme-siamese .cat-paw{background:#8b6f4e}
+/* ===== TOWER CAT THEMES (girly progression ✨) ===== */
+/* L10 樱花猫 - soft cherry blossom pink */
+.theme-sakura .cat-body,.theme-sakura .cat-head{background:linear-gradient(135deg,#ffc0cb,#ffb7c5)}
+.theme-sakura .cat-ear-l,.theme-sakura .cat-ear-r{border-bottom-color:#ff9eaf}
+.theme-sakura .cat-ear-inner-l,.theme-sakura .cat-ear-inner-r{border-bottom-color:#ffd4de}
+.theme-sakura .cat-tail{background:#ff9eaf}
+.theme-sakura .cat-paw{background:#ffd4de}
 
-.theme-persian .cat-body,.theme-persian .cat-head{background:#e8e0f0}
-.theme-persian .cat-ear-l,.theme-persian .cat-ear-r{border-bottom-color:#d0c0e0}
-.theme-persian .cat-ear-inner-l,.theme-persian .cat-ear-inner-r{border-bottom-color:#e8d8f8}
-.theme-persian .cat-tail{background:#d0c0e0}
-.theme-persian .cat-paw{background:#d0c0e0}
+/* L20 奶茶猫 - warm milk tea */
+.theme-milktea .cat-body,.theme-milktea .cat-head{background:linear-gradient(135deg,#d4a574,#c4956a)}
+.theme-milktea .cat-ear-l,.theme-milktea .cat-ear-r{border-bottom-color:#b8845a}
+.theme-milktea .cat-ear-inner-l,.theme-milktea .cat-ear-inner-r{border-bottom-color:#e0bb94}
+.theme-milktea .cat-tail{background:#b8845a}
+.theme-milktea .cat-paw{background:#e0bb94}
+.theme-milktea .cat-head{box-shadow:inset -3px -3px 8px rgba(255,255,255,.3)}
 
-.theme-ragdoll .cat-body{background:#f0f0f5}
-.theme-ragdoll .cat-head{background:#f0f0f5}
-.theme-ragdoll .cat-ear-l,.theme-ragdoll .cat-ear-r{border-bottom-color:#c8c8d8}
-.theme-ragdoll .cat-ear-inner-l,.theme-ragdoll .cat-ear-inner-r{border-bottom-color:#e0d8f0}
-.theme-ragdoll .cat-tail{background:#c8c8d8}
-.theme-ragdoll .cat-paw{background:#c8c8d8}
+/* L30 棉花糖猫 - fluffy marshmallow pink */
+.theme-marshmallow .cat-body,.theme-marshmallow .cat-head{background:linear-gradient(135deg,#fff0f5,#ffe4ee)}
+.theme-marshmallow .cat-ear-l,.theme-marshmallow .cat-ear-r{border-bottom-color:#ffd1e0}
+.theme-marshmallow .cat-ear-inner-l,.theme-marshmallow .cat-ear-inner-r{border-bottom-color:#fff0f5}
+.theme-marshmallow .cat-tail{background:#ffd1e0}
+.theme-marshmallow .cat-paw{background:#ffe4ee}
+.theme-marshmallow .cat-head{box-shadow:0 0 12px rgba(255,182,193,.4)}
 
-.theme-british .cat-body,.theme-british .cat-head{background:#7b8fa1}
-.theme-british .cat-ear-l,.theme-british .cat-ear-r{border-bottom-color:#7b8fa1}
-.theme-british .cat-ear-inner-l,.theme-british .cat-ear-inner-r{border-bottom-color:#a0b0c0}
-.theme-british .cat-tail{background:#6a7e8f}
-.theme-british .cat-paw{background:#6a7e8f}
+/* L40 薰衣草猫 - lavender elegance */
+.theme-lavender .cat-body,.theme-lavender .cat-head{background:linear-gradient(135deg,#c3aed6,#b39ddb)}
+.theme-lavender .cat-ear-l,.theme-lavender .cat-ear-r{border-bottom-color:#9575cd}
+.theme-lavender .cat-ear-inner-l,.theme-lavender .cat-ear-inner-r{border-bottom-color:#d1c4e9}
+.theme-lavender .cat-tail{background:#9575cd}
+.theme-lavender .cat-paw{background:#d1c4e9}
 
-.theme-american .cat-body{background:#c0c0c0}
-.theme-american .cat-head{background:#c0c0c0}
-.theme-american .cat-ear-l,.theme-american .cat-ear-r{border-bottom-color:#a0a0a0}
-.theme-american .cat-ear-inner-l,.theme-american .cat-ear-inner-r{border-bottom-color:#d8d8d8}
-.theme-american .cat-tail{background:#a8a8a8}
-.theme-american .cat-paw{background:#a8a8a8}
-.theme-american .cat-body{background:repeating-linear-gradient(90deg,#c0c0c0,#c0c0c0 8px,#a8a8a8 8px,#a8a8a8 10px)}
+/* L50 草莓猫 - strawberry with polka dots */
+.theme-strawberry .cat-body{background:radial-gradient(circle at 25% 35%,#fff 2px,transparent 2px),radial-gradient(circle at 55% 25%,#fff 1.5px,transparent 1.5px),radial-gradient(circle at 40% 60%,#fff 2px,transparent 2px),radial-gradient(circle at 65% 55%,#fff 1.5px,transparent 1.5px),radial-gradient(circle at 30% 75%,#fff 1.5px,transparent 1.5px),linear-gradient(135deg,#ff6b8a,#ff4d6d)}
+.theme-strawberry .cat-head{background:linear-gradient(135deg,#ff6b8a,#ff4d6d)}
+.theme-strawberry .cat-ear-l,.theme-strawberry .cat-ear-r{border-bottom-color:#e8405f}
+.theme-strawberry .cat-ear-inner-l,.theme-strawberry .cat-ear-inner-r{border-bottom-color:#ff8fa3}
+.theme-strawberry .cat-tail{background:#e8405f}
+.theme-strawberry .cat-paw{background:#ff8fa3}
 
-.theme-maine .cat-body,.theme-maine .cat-head{background:#a0724a}
-.theme-maine .cat-ear-l,.theme-maine .cat-ear-r{border-bottom-color:#a0724a}
-.theme-maine .cat-ear-inner-l,.theme-maine .cat-ear-inner-r{border-bottom-color:#c0906a}
-.theme-maine .cat-tail{background:#8a6040}
-.theme-maine .cat-paw{background:#8a6040}
+/* L60 独角兽猫 - unicorn rainbow */
+.theme-unicorn .cat-body{background:linear-gradient(135deg,#ff9a9e,#fecfef,#a18cd1,#fbc2eb)}
+.theme-unicorn .cat-head{background:linear-gradient(135deg,#fecfef,#a18cd1,#fbc2eb)}
+.theme-unicorn .cat-ear-l,.theme-unicorn .cat-ear-r{border-bottom-color:#b8a9d4}
+.theme-unicorn .cat-ear-inner-l,.theme-unicorn .cat-ear-inner-r{border-bottom-color:#ffd1e8}
+.theme-unicorn .cat-tail{background:linear-gradient(90deg,#ff9a9e,#a18cd1,#88d8b0)}
+.theme-unicorn .cat-paw{background:#fbc2eb}
 
-.theme-fold .cat-body,.theme-fold .cat-head{background:#d4c4a8}
-.theme-fold .cat-ear-l,.theme-fold .cat-ear-r{border-bottom-color:#d4c4a8;top:4px}
-.theme-fold .cat-ear-inner-l,.theme-fold .cat-ear-inner-r{border-bottom-color:#e0d0b8;top:6px}
-.theme-fold .cat-tail{background:#c0b090}
-.theme-fold .cat-paw{background:#c0b090}
+/* L70 月光猫 - silver moonlight glow */
+.theme-moonlight .cat-body,.theme-moonlight .cat-head{background:linear-gradient(135deg,#e8eaf6,#c5cae9)}
+.theme-moonlight .cat-ear-l,.theme-moonlight .cat-ear-r{border-bottom-color:#9fa8da}
+.theme-moonlight .cat-ear-inner-l,.theme-moonlight .cat-ear-inner-r{border-bottom-color:#e8eaf6}
+.theme-moonlight .cat-tail{background:#9fa8da}
+.theme-moonlight .cat-paw{background:#c5cae9}
+.theme-moonlight .cat-body{box-shadow:0 0 20px rgba(159,168,218,.5),0 0 40px rgba(159,168,218,.2)}
 
-.theme-blue .cat-body,.theme-blue .cat-head{background:#6b9ac4}
-.theme-blue .cat-ear-l,.theme-blue .cat-ear-r{border-bottom-color:#6b9ac4}
-.theme-blue .cat-ear-inner-l,.theme-blue .cat-ear-inner-r{border-bottom-color:#8ab4e0}
-.theme-blue .cat-tail{background:#5a88b0}
-.theme-blue .cat-paw{background:#5a88b0}
+/* L80 极光猫 - aurora borealis shimmer */
+.theme-aurora .cat-body{background:linear-gradient(135deg,#00c9ff,#92fe9d,#f9d423,#ff6e7f,#b721ff)}
+.theme-aurora .cat-head{background:linear-gradient(135deg,#92fe9d,#00c9ff,#b721ff)}
+.theme-aurora .cat-ear-l,.theme-aurora .cat-ear-r{border-bottom-color:#4db6ac}
+.theme-aurora .cat-ear-inner-l,.theme-aurora .cat-ear-inner-r{border-bottom-color:#80deea}
+.theme-aurora .cat-tail{background:linear-gradient(90deg,#00c9ff,#92fe9d,#f9d423)}
+.theme-aurora .cat-paw{background:#80cbc4}
+.theme-aurora .cat-body{box-shadow:0 0 25px rgba(0,201,255,.35),0 0 50px rgba(146,254,157,.2)}
 
-.theme-bengal .cat-body{background:#e8a838}
-.theme-bengal .cat-head{background:#e8a838}
-.theme-bengal .cat-ear-l,.theme-bengal .cat-ear-r{border-bottom-color:#c88828}
-.theme-bengal .cat-ear-inner-l,.theme-bengal .cat-ear-inner-r{border-bottom-color:#f0c060}
-.theme-bengal .cat-tail{background:#c88828}
-.theme-bengal .cat-paw{background:#c88828}
-.theme-bengal .cat-body{background:radial-gradient(circle at 20% 30%,#c88828 3px,transparent 3px),radial-gradient(circle at 60% 20%,#c88828 2px,transparent 2px),radial-gradient(circle at 40% 60%,#c88828 3px,transparent 3px),radial-gradient(circle at 70% 70%,#c88828 2px,transparent 2px),#e8a838}
+/* L90 星空猫 - starry galaxy */
+.theme-galaxy .cat-body{background:radial-gradient(circle at 20% 30%,#fff 1px,transparent 1px),radial-gradient(circle at 60% 15%,#fff 1.5px,transparent 1.5px),radial-gradient(circle at 80% 50%,#fff 1px,transparent 1px),radial-gradient(circle at 35% 65%,#fff 1px,transparent 1px),radial-gradient(circle at 70% 80%,#fff 1.5px,transparent 1.5px),radial-gradient(circle at 50% 40%,#fff 1px,transparent 1px),linear-gradient(135deg,#0f0c29,#302b63,#24243e)}
+.theme-galaxy .cat-head{background:radial-gradient(circle at 30% 40%,#fff 1px,transparent 1px),radial-gradient(circle at 60% 30%,#fff .5px,transparent .5px),linear-gradient(135deg,#302b63,#24243e)}
+.theme-galaxy .cat-ear-l,.theme-galaxy .cat-ear-r{border-bottom-color:#24243e}
+.theme-galaxy .cat-ear-inner-l,.theme-galaxy .cat-ear-inner-r{border-bottom-color:#4a3f8a}
+.theme-galaxy .cat-tail{background:linear-gradient(90deg,#302b63,#6a5acd,#302b63)}
+.theme-galaxy .cat-paw{background:#24243e}
+.theme-galaxy .cat-body{box-shadow:0 0 30px rgba(106,90,205,.5),0 0 60px rgba(106,90,205,.2)}
 
-.theme-lion .cat-body,.theme-lion .cat-head{background:#d4a030}
-.theme-lion .cat-ear-l,.theme-lion .cat-ear-r{border-bottom-color:#d4a030}
-.theme-lion .cat-ear-inner-l,.theme-lion .cat-ear-inner-r{border-bottom-color:#e8b840}
-.theme-lion .cat-tail{background:#c09020}
-.theme-lion .cat-paw{background:#c09020}
-.theme-lion .cat-head{box-shadow:0 0 0 8px rgba(180,120,20,.4),0 0 0 14px rgba(180,120,20,.2)}
+/* L100 天使猫 - golden angel ✨ */
+.theme-angel .cat-body,.theme-angel .cat-head{background:linear-gradient(135deg,#fff8e7,#ffe4b5)}
+.theme-angel .cat-ear-l,.theme-angel .cat-ear-r{border-bottom-color:#ffd080}
+.theme-angel .cat-ear-inner-l,.theme-angel .cat-ear-inner-r{border-bottom-color:#fff0cc}
+.theme-angel .cat-tail{background:#ffd080}
+.theme-angel .cat-paw{background:#fff0cc}
+.theme-angel .cat-body-wrap::before{content:'✨';position:absolute;top:-10px;left:-15px;font-size:16px;animation:sparkle 1.5s ease-in-out infinite}
+.theme-angel .cat-body-wrap::after{content:'✨';position:absolute;top:-5px;right:-15px;font-size:12px;animation:sparkle 1.5s ease-in-out infinite .5s}
+.theme-angel .cat-body{box-shadow:0 0 30px rgba(255,215,0,.5),0 0 60px rgba(255,215,0,.25),0 0 90px rgba(255,215,0,.1)}
+@keyframes sparkle{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
 
 /* ===== GAME SCREEN ===== */
 #game{max-width:480px;width:100%;margin:0 auto;padding:12px;justify-content:flex-start}
@@ -191,12 +202,10 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 .action-btn .text{font-size:.85em;font-weight:700}
 .action-btn .count{font-size:.7em;color:#aaa;margin-top:2px}
 .action-btn:disabled{opacity:.35;cursor:not-allowed}
-.action-btn:disabled:active{transform:none}
 .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;margin-bottom:20px}
 .menu-btn{background:var(--card);border:none;border-radius:16px;padding:14px 8px;cursor:pointer;font-weight:700;font-size:.9em;transition:all .2s;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;gap:4px}
 .menu-btn:active{transform:scale(.96)}
 .menu-btn .menu-icon{font-size:24px}
-.menu-btn .badge{background:var(--danger);color:#fff;font-size:.65em;padding:2px 6px;border-radius:8px;position:absolute;top:8px;right:8px}
 
 /* MODAL */
 .modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.45);z-index:100;align-items:center;justify-content:center;padding:16px}
@@ -204,7 +213,6 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 .modal{background:var(--bg);border-radius:24px;padding:24px 20px;width:100%;max-width:420px;max-height:88vh;overflow-y:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.2)}
 .modal h2{text-align:center;margin-bottom:16px;font-size:1.2em}
 .modal-close{position:absolute;top:14px;right:16px;background:rgba(0,0,0,.06);border:none;width:32px;height:32px;border-radius:50%;font-size:1.1em;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#888;transition:all .2s}
-.modal-close:hover{background:rgba(0,0,0,.12)}
 
 /* DAILY */
 .task-item{background:var(--card);border-radius:14px;padding:14px 16px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.04)}
@@ -234,7 +242,6 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 .p24-key{padding:12px 4px;font-size:1em;font-weight:700;border:2px solid #eee;border-radius:10px;background:var(--card);cursor:pointer;transition:all .15s;text-align:center}
 .p24-key:active{transform:scale(.93);background:#f0f0f0}
 .p24-key.op{background:var(--pink);color:#fff;border-color:var(--pink)}
-.p24-key.op:active{background:var(--pink2)}
 .p24-key.action{background:var(--blue);border-color:var(--blue)}
 .p24-key.del{background:var(--danger);color:#fff;border-color:var(--danger)}
 .p24-result{text-align:center;margin-top:10px;font-weight:700;font-size:.95em;min-height:24px}
@@ -264,11 +271,16 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 .cat-detail .detail-unlock{color:var(--pink);font-size:.85em;margin:8px 0}
 .cat-detail .detail-actions{display:flex;gap:8px;justify-content:center;margin-top:14px}
 
+/* GUIDE MODAL */
+.guide-section{background:var(--card);border-radius:14px;padding:14px 16px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.guide-section h3{font-size:.95em;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.guide-section p{font-size:.82em;color:#666;line-height:1.6}
+.guide-section .highlight{color:var(--pink2);font-weight:700}
+
 /* Toast */
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-120px);background:var(--text);color:#fff;padding:12px 24px;border-radius:14px;font-weight:700;z-index:300;transition:transform .3s;font-size:.9em;max-width:85%;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.2)}
 .toast.show{transform:translateX(-50%) translateY(0)}
 
-/* Responsive */
 @media(max-width:380px){.action-grid{gap:8px}.p24-key{padding:10px 2px;font-size:.9em}}
 </style>
 </head>
@@ -281,7 +293,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
   <p class="sub">选择你的第一只猫咪伙伴</p>
   <div class="cat-picker" id="catPicker"></div>
   <input class="name-input" id="catNameInput" placeholder="给猫咪取个名字" maxlength="8">
-  <button class="btn btn-primary" id="startBtn" onclick="startGame()">开始养猫 🎉</button>
+  <button class="btn btn-primary" onclick="startGame()">开始养猫 🎉</button>
 </div>
 
 <!-- GAME -->
@@ -300,9 +312,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
     <div class="growth-bar-bg"><div class="growth-bar" id="growthBar" style="width:0%"></div></div>
     <div class="growth-text" id="growthText">成长值: 0/100</div>
   </div>
-  <div class="cat-stage" id="catStage">
-    <div class="css-cat stage-1" id="catDisplay"></div>
-  </div>
+  <div class="cat-stage" id="catStage"></div>
   <div class="mood-bubble" id="moodBubble">喵~ 你好呀！</div>
   <div class="action-grid">
     <button class="action-btn" onclick="doFeed()"><span class="icon">🐟</span><span class="text">喂猫粮</span><span class="count" id="feedCount">×0</span></button>
@@ -313,10 +323,23 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
   <div class="menu-grid">
     <button class="menu-btn" onclick="openModal('dailyModal')"><span class="menu-icon">📋</span>每日任务</button>
     <button class="menu-btn" onclick="openModal('towerModal')"><span class="menu-icon">🗼</span>爬塔挑战</button>
-    <button class="menu-btn" onclick="openModal('quiz24Modal')"><span class="menu-icon">🃏</span>算24点</button>
-    <button class="menu-btn" onclick="openModal('collectionModal')"><span class="menu-icon">📖</span>猫咪图鉴</button>
+    <button class="menu-btn" onclick="openModal('guideModal')"><span class="menu-icon">📖</span>玩法介绍</button>
+    <button class="menu-btn" onclick="openModal('collectionModal')"><span class="menu-icon">🐱</span>猫咪图鉴</button>
   </div>
 </div>
+
+<!-- GUIDE -->
+<div class="modal-overlay" id="guideModal"><div class="modal"><button class="modal-close" onclick="closeModal('guideModal')">✕</button><h2>📖 玩法介绍</h2>
+  <div class="guide-section"><h3>🐱 养猫</h3><p>喂猫粮、喂水、喂猫条、洗澡都可以增加<span class="highlight">成长值</span>。<br>猫条 +5 成长值，其他 +1。<br>满 <span class="highlight">100 成长值</span> 升一级，共 10 级。<br>每 3 级体型变大，<span class="highlight">10 级戴上皇冠 👑</span></p></div>
+  <div class="guide-section"><h3>📋 每日任务</h3><p>
+    🎯 <span class="highlight">签到</span> → 送 1 次洗澡<br>
+    🃏 <span class="highlight">算 24 点 ×5</span> → 送 1 份猫粮<br>
+    🔢 <span class="highlight">10以内乘法 ×10</span> → 送 1 份水<br>
+    🧮 <span class="highlight">19以内乘法 ×10</span> → 送 1 份猫条
+  </p></div>
+  <div class="guide-section"><h3>🗼 爬塔挑战</h3><p>19 以内乘法 20 题速算<br>由易到难共 <span class="highlight">100 层</span><br>答对 ≥15 题通关<br>每 10 层解锁一只<span class="highlight">稀有猫咪</span>🐱<br>层数越高猫咪越好看！</p></div>
+  <div class="guide-section"><h3>🐱 猫咪图鉴</h3><p>4 只初始猫咪 + 10 只爬塔解锁猫咪<br>点击可查看详情并<span class="highlight">切换形象</span><br>快去爬塔收集全部吧！✨</p></div>
+</div></div>
 
 <!-- DAILY -->
 <div class="modal-overlay" id="dailyModal"><div class="modal"><button class="modal-close" onclick="closeModal('dailyModal')">✕</button><h2>📋 每日任务</h2><div id="dailyTasksList"></div></div></div>
@@ -344,7 +367,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 </div></div>
 
 <!-- COLLECTION -->
-<div class="modal-overlay" id="collectionModal"><div class="modal"><button class="modal-close" onclick="closeModal('collectionModal')">✕</button><h2>📖 猫咪图鉴</h2><div class="collection-grid" id="collectionGrid"></div></div></div>
+<div class="modal-overlay" id="collectionModal"><div class="modal"><button class="modal-close" onclick="closeModal('collectionModal')">✕</button><h2>🐱 猫咪图鉴</h2><div class="collection-grid" id="collectionGrid"></div></div></div>
 
 <!-- CAT DETAIL -->
 <div class="modal-overlay" id="catDetailModal"><div class="modal"><button class="modal-close" onclick="closeModal('catDetailModal')">✕</button><div class="cat-detail" id="catDetail"></div></div></div>
@@ -358,16 +381,16 @@ const BASIC_CATS=[
   {id:'grey',theme:'theme-grey',name:'灰猫',breed:'英短蓝灰',desc:'高冷但黏人的小灰灰'},
 ];
 const TOWER_CATS=[
-  {id:'t10',theme:'theme-siamese',name:'暹罗猫',breed:'暹罗猫',floor:10,desc:'话多爱聊的贵族猫'},
-  {id:'t20',theme:'theme-persian',name:'波斯猫',breed:'波斯猫',floor:20,desc:'雍容华贵的长毛公主'},
-  {id:'t30',theme:'theme-ragdoll',name:'布偶猫',breed:'布偶猫',floor:30,desc:'仙气飘飘的小仙女'},
-  {id:'t40',theme:'theme-british',name:'英短猫',breed:'英短蓝猫',floor:40,desc:'圆润敦厚的蓝胖子'},
-  {id:'t50',theme:'theme-american',name:'美短猫',breed:'美国短毛',floor:50,desc:'活泼好动的斑纹猎手'},
-  {id:'t60',theme:'theme-maine',name:'缅因猫',breed:'缅因巨猫',floor:60,desc:'温柔的巨兽之王'},
-  {id:'t70',theme:'theme-fold',name:'折耳猫',breed:'苏格兰折耳',floor:70,desc:'萌到犯规的小精灵'},
-  {id:'t80',theme:'theme-blue',name:'俄罗斯蓝猫',breed:'俄罗斯蓝猫',floor:80,desc:'翠绿眼眸的冰美人'},
-  {id:'t90',theme:'theme-bengal',name:'孟加拉豹猫',breed:'孟加拉豹猫',floor:90,desc:'野性十足的小猎豹'},
-  {id:'t100',theme:'theme-lion',name:'狮子猫',breed:'🦁 狮王',floor:100,desc:'万猫之王，威风凛凛'},
+  {id:'t10',theme:'theme-sakura',name:'樱花猫',breed:'🌸 樱花猫',floor:10,desc:'花瓣般柔软的粉色毛发，春天的气息'},
+  {id:'t20',theme:'theme-milktea',name:'奶茶猫',breed:'🧋 奶茶猫',floor:20,desc:'温暖的奶茶色，像冬日里的捧杯'},
+  {id:'t30',theme:'theme-marshmallow',name:'棉花糖猫',breed:'🍡 棉花糖猫',floor:30,desc:'粉白蓬松，软到犯规的小可爱'},
+  {id:'t40',theme:'theme-lavender',name:'薰衣草猫',breed:'💜 薰衣草猫',floor:40,desc:'优雅的紫色毛发，带着淡淡的花香'},
+  {id:'t50',theme:'theme-strawberry',name:'草莓猫',breed:'🍓 草莓猫',floor:50,desc:'甜甜的草莓红，满身可爱的波点'},
+  {id:'t60',theme:'theme-unicorn',name:'独角兽猫',breed:'🦄 独角兽猫',floor:60,desc:'梦幻彩虹渐变，传说中的魔法猫咪'},
+  {id:'t70',theme:'theme-moonlight',name:'月光猫',breed:'🌙 月光猫',floor:70,desc:'银蓝色月光笼罩，宁静而神秘'},
+  {id:'t80',theme:'theme-aurora',name:'极光猫',breed:'🌌 极光猫',floor:80,desc:'北极光在身上流转，璀璨夺目'},
+  {id:'t90',theme:'theme-galaxy',name:'星空猫',breed:'⭐ 星空猫',floor:90,desc:'深邃宇宙藏在毛发间，星光点点'},
+  {id:'t100',theme:'theme-angel',name:'天使猫',breed:'👼 天使猫',floor:100,desc:'金光闪闪的猫界天使，万猫之王✨'},
 ];
 const ALL_CATS=[...BASIC_CATS,...TOWER_CATS];
 
@@ -382,14 +405,14 @@ const MOODS={
 };
 
 // ===== STATE =====
-let S={started:false,cat:{name:'',type:'orange'},level:1,growth:0,food:0,water:0,treats:0,baths:0,lastCheckIn:'',daily:{checkin:false,quiz24:0,quizMul10:0,quizMul19:0},towerBest:0,towerCurrent:0,unlocked:['orange','black','white','grey'],activeCat:'orange',lastDate:''};
+let S={started:false,cat:{name:'',type:'orange'},level:1,growth:0,food:0,water:0,treats:0,baths:0,daily:{checkin:false,quiz24:0,quizMul10:0,quizMul19:0},towerBest:0,towerCurrent:0,unlocked:['orange','black','white','grey'],activeCat:'orange',lastDate:''};
 function load(){try{const s=localStorage.getItem('catGame2');if(s)S=JSON.parse(s)}catch(e){}}
 function save(){localStorage.setItem('catGame2',JSON.stringify(S))}
 load();
 
 function checkDay(){const t=new Date().toLocaleDateString();if(S.lastDate!==t){S.daily={checkin:false,quiz24:0,quizMul10:0,quizMul19:0};S.lastDate=t;save()}}
 
-// ===== CAT HTML GENERATOR =====
+// ===== CAT HTML =====
 function makeCatHTML(theme,stage=1,crowned=false){
   return `<div class="css-cat ${theme} stage-${stage}">${crowned?'<div class="crown-wrap">👑</div>':''}<div class="cat-body-wrap">
     <div class="cat-ear-l"></div><div class="cat-ear-r"></div>
@@ -399,12 +422,10 @@ function makeCatHTML(theme,stage=1,crowned=false){
     <div class="cat-nose"></div><div class="cat-mouth"></div>
     <div class="cat-whisker cat-w1"></div><div class="cat-whisker cat-w2"></div>
     <div class="cat-whisker cat-w3"></div><div class="cat-whisker cat-w4"></div>
-    <div class="cat-body"></div>
-    <div class="cat-tail"></div>
+    <div class="cat-body"></div><div class="cat-tail"></div>
     <div class="cat-paw cat-paw-l"></div><div class="cat-paw cat-paw-r"></div>
   </div></div>`;
 }
-
 function makeMiniCat(theme){
   return `<div class="collection-mini-cat"><div class="css-cat ${theme} stage-1"><div class="cat-body-wrap">
     <div class="cat-ear-l"></div><div class="cat-ear-r"></div>
@@ -427,15 +448,12 @@ function initPicker(){
     </div>`).join('');
 }
 function selCat(el,i){document.querySelectorAll('.cat-option').forEach(e=>e.classList.remove('selected'));el.classList.add('selected');selIdx=i}
-
 function startGame(){
   const name=document.getElementById('catNameInput').value.trim();
   if(!name){toast('请给猫咪取个名字~');return}
-  const c=BASIC_CATS[selIdx];
-  S.cat={name,type:c.id};S.started=true;S.lastDate=new Date().toLocaleDateString();
+  S.cat={name,type:BASIC_CATS[selIdx].id};S.started=true;S.lastDate=new Date().toLocaleDateString();
   save();showScreen('game');render();
 }
-
 function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
 
 // ===== RENDER =====
@@ -454,13 +472,10 @@ function render(){
   document.getElementById('bathCount').textContent=`×${S.baths}`;
   document.getElementById('growthBar').style.width=`${S.growth}%`;
   document.getElementById('growthText').textContent=`成长值: ${S.growth}/100`;
-
   const stage=S.level>=7?3:S.level>=4?2:1;
-  const crowned=S.level>=10;
-  document.getElementById('catStage').innerHTML=makeCatHTML(catInfo.theme,stage,crowned);
+  document.getElementById('catStage').innerHTML=makeCatHTML(catInfo.theme,stage,S.level>=10);
   updateMood();
 }
-
 function updateMood(){
   let p=MOODS.idle;
   if(S.food===0)p=MOODS.hungry;
@@ -469,18 +484,13 @@ function updateMood(){
   else p=MOODS.happy;
   document.getElementById('moodBubble').textContent=p[Math.floor(Math.random()*p.length)];
 }
-
-function bounceCat(){const el=document.getElementById('catDisplay');if(el){el.classList.remove('bounce');void el.offsetWidth;el.classList.add('bounce')}
-  const c=document.querySelector('#catStage .css-cat');if(c){c.classList.remove('bounce');void c.offsetWidth;c.classList.add('bounce')}
-}
-
+function bounceCat(){const c=document.querySelector('#catStage .css-cat');if(c){c.classList.remove('bounce');void c.offsetWidth;c.classList.add('bounce')}}
 function addGrowth(n){
   S.growth+=n;
   while(S.growth>=100&&S.level<10){S.growth-=100;S.level++;toast(`🎉 ${S.cat.name} 升到 Lv.${S.level}！`)}
   if(S.level>=10)S.growth=Math.min(S.growth,100);
   save();render();
 }
-
 function doFeed(){if(S.food<=0){toast('没有猫粮了，去做任务获取~');return}S.food--;bounceCat();toast('吃得真香！成长+1 🐟');addGrowth(1)}
 function doWater(){if(S.water<=0){toast('没有水了，去做任务获取~');return}S.water--;bounceCat();toast('咕噜咕噜~ 成长+1 💧');addGrowth(1)}
 function doTreat(){if(S.treats<=0){toast('没有猫条了，去做任务获取~');return}S.treats--;bounceCat();toast('超爱猫条！成长+5 🧶');addGrowth(5)}
@@ -504,7 +514,6 @@ function renderDaily(){
       <div class="task-left"><div class="task-name">${t.name} ${t.prog?`(${t.prog})`:''}</div><div class="task-desc">${t.desc}</div></div>
       <div><div class="task-reward">${t.reward}</div>${t.done?'<span style="color:var(--success)">✅</span>':`<button class="btn btn-primary btn-sm" id="dtask_${t.name}">去完成</button>`}</div>
     </div>`).join('');
-  // Bind buttons
   tasks.forEach(t=>{if(!t.done){const b=document.getElementById('dtask_'+t.name);if(b)b.onclick=t.fn}});
 }
 function doCheckIn(){if(S.daily.checkin){toast('今天已签到~');return}S.daily.checkin=true;S.baths++;save();toast('签到成功！+1次洗澡 🛁');renderDaily();render()}
@@ -516,16 +525,14 @@ function startMul(mode){
   for(let i=0;i<10;i++){
     let a,b;
     if(mode===10){a=r(2,9);b=r(2,9)}else{a=r(2,18);b=r(2,18)}
-    const ans=a*b;MQ.push({a,b,ans,opts:genOpts(ans,4)});
+    MQ.qs.push({a,b,ans:a*b,opts:genOpts(a*b,4)});
   }
   document.getElementById('quizTitle').textContent=mode===10?'10以内乘法':'19以内乘法';
   showMulQ();openModal('quizModal');
 }
-MQ.push=function(q){this.qs.push(q)};
 function genOpts(c,n){const s=new Set([c]);while(s.size<n){let v=c+r(-8,8);if(v>0&&v!==c)s.add(v)}return shuf([...s])}
 function r(a,b){return Math.floor(Math.random()*(b-a+1))+a}
 function shuf(a){for(let i=a.length-1;i>0;i--){const j=r(0,i);[a[i],a[j]]=[a[j],a[i]]}return a}
-
 function showMulQ(){
   const q=MQ.qs[MQ.cur];
   document.getElementById('quizProgress').textContent=`${MQ.cur+1}/${MQ.qs.length}`;
@@ -539,7 +546,7 @@ function chkMul(el,v){
 }
 function finMul(){
   closeQuizModal();
-  const {mode,ok}=MQ;
+  const{mode,ok}=MQ;
   if(mode===10){S.daily.quizMul10+=ok;if(S.daily.quizMul10>=10&&S.daily.quizMul10-ok<10){S.water++;toast(`答对${ok}题！获得水 💧`)}else toast(`答对${ok}题！还需${Math.max(0,10-S.daily.quizMul10)}题`)}
   else{S.daily.quizMul19+=ok;if(S.daily.quizMul19>=10&&S.daily.quizMul19-ok<10){S.treats++;toast(`答对${ok}题！获得猫条 🧶`)}else toast(`答对${ok}题！还需${Math.max(0,10-S.daily.quizMul19)}题`)}
   save();render();
@@ -548,7 +555,6 @@ function closeQuizModal(){closeModal('quizModal')}
 
 // ===== 24 POINT =====
 const SOLVABLE24=[[1,2,3,8],[1,2,4,6],[1,3,4,5],[2,3,4,5],[2,3,4,6],[3,3,4,6],[1,2,5,8],[1,2,6,8],[1,3,4,8],[1,4,5,6],[2,2,3,8],[2,3,3,6],[2,4,4,7],[3,3,3,8],[3,3,5,5],[4,4,4,4],[1,2,3,4],[1,2,3,6],[1,2,4,8],[2,2,2,9],[2,2,4,8],[2,3,3,8],[2,3,6,6],[2,4,4,6],[3,3,4,4],[3,4,4,5],[1,1,4,6],[1,3,6,6],[6,6,6,6],[5,5,5,1],[2,2,6,6],[8,8,8,3],[9,9,9,5],[1,5,5,5],[2,2,2,6],[3,4,6,6],[1,1,3,8],[1,2,2,8],[2,3,3,4],[3,5,5,9],[1,4,6,7]];
-
 let P24={sets:[],cur:0,ok:0,usedNums:[],expr:[]};
 function startQuiz24(){
   if(S.daily.quiz24>=5){toast('今天24点已完成~');return}
@@ -556,81 +562,56 @@ function startQuiz24(){
   for(let i=0;i<5;i++)P24.sets.push(shuf([...SOLVABLE24[r(0,SOLVABLE24.length-1)]]).sort(()=>Math.random()-.5));
   show24Q();openModal('quiz24Modal');
 }
-
 function show24Q(){
   const cards=P24.sets[P24.cur];
   document.getElementById('p24Progress').textContent=`${P24.cur+1}/5 · 已答对${P24.ok}`;
   document.getElementById('p24Cards').innerHTML=cards.map((c,i)=>`<div class="p24-card" id="p24c${i}" onclick="pick24Num(${i})">${c}</div>`).join('');
-  P24.usedNums=[];P24.expr=[];
-  render24Display();
-  build24Keypad(cards);
+  P24.usedNums=[];P24.expr=[];render24Display();build24Keypad(cards);
   document.getElementById('p24Result').textContent='';
 }
-
 function build24Keypad(cards){
   const ops=['+','−','×','÷','(',')'];
-  let html='';
-  // Row: numbers
-  html+=cards.map((c,i)=>`<button class="p24-key" id="p24k${i}" onclick="pick24Num(${i})">${c}</button>`).join('');
-  // Row: operators
+  let html=cards.map((c,i)=>`<button class="p24-key" id="p24k${i}" onclick="pick24Num(${i})">${c}</button>`).join('');
   html+=ops.map(o=>`<button class="p24-key op" onclick="pick24Op('${o}')">${o}</button>`).join('');
-  // Row: del, clear, submit
   html+=`<button class="p24-key del" onclick="del24()">⌫</button>`;
   html+=`<button class="p24-key action" onclick="clear24()">清空</button>`;
   html+=`<button class="p24-key op" style="grid-column:span 3" onclick="submit24()">= 24 ?</button>`;
   document.getElementById('p24Keypad').innerHTML=html;
 }
-
 function pick24Num(idx){
-  if(P24.usedNums.includes(idx))return;
-  P24.usedNums.push(idx);
+  if(P24.usedNums.includes(idx))return;P24.usedNums.push(idx);
   P24.expr.push({type:'num',val:P24.sets[P24.cur][idx],idx});
   document.getElementById('p24c'+idx).style.opacity='.3';
   document.getElementById('p24k'+idx).style.opacity='.3';
   render24Display();
 }
-function pick24Op(op){
-  P24.expr.push({type:'op',val:op});
-  render24Display();
-}
+function pick24Op(op){P24.expr.push({type:'op',val:op});render24Display()}
 function del24(){
-  if(!P24.expr.length)return;
-  const last=P24.expr.pop();
-  if(last.type==='num'){
-    const i=P24.usedNums.indexOf(last.idx);
-    if(i>-1)P24.usedNums.splice(i,1);
+  if(!P24.expr.length)return;const last=P24.expr.pop();
+  if(last.type==='num'){const i=P24.usedNums.indexOf(last.idx);if(i>-1)P24.usedNums.splice(i,1);
     const el=document.getElementById('p24c'+last.idx);if(el)el.style.opacity='1';
-    const k=document.getElementById('p24k'+last.idx);if(k)k.style.opacity='1';
-  }
+    const k=document.getElementById('p24k'+last.idx);if(k)k.style.opacity='1';}
   render24Display();
 }
 function clear24(){
   P24.expr=[];P24.usedNums=[];
   document.querySelectorAll('.p24-card').forEach(e=>e.style.opacity='1');
   document.querySelectorAll('.p24-key').forEach(e=>e.style.opacity='1');
-  render24Display();
-  document.getElementById('p24Result').textContent='';
+  render24Display();document.getElementById('p24Result').textContent='';
 }
 function render24Display(){
   const d=document.getElementById('p24Display');
   if(!P24.expr.length){d.textContent='点击数字和运算符组成24';return}
-  d.innerHTML=P24.expr.map(t=>{
-    if(t.type==='num')return `<span class="token num-token">${t.val}</span>`;
-    return `<span class="token op-token">${t.val}</span>`;
-  }).join('');
+  d.innerHTML=P24.expr.map(t=>t.type==='num'?`<span class="token num-token">${t.val}</span>`:`<span class="token op-token">${t.val}</span>`).join('');
 }
-
 function submit24(){
   if(!P24.expr.length)return;
-  let expr='';
-  const cards=P24.sets[P24.cur].map(String);
-  const usedCards=[];
+  let expr='';const usedCards=[];
   for(const t of P24.expr){
     if(t.type==='num'){expr+=t.val;usedCards.push(String(t.val))}
-    else{expr+=t.val.replace('−','-').replace('×','*').replace('÷','/')}
+    else expr+=t.val.replace('−','-').replace('×','*').replace('÷','/');
   }
-  // Check all 4 numbers used
-  const cc=[...cards];let ok=true;
+  const cc=[...P24.sets[P24.cur].map(String)];let ok=true;
   for(const n of usedCards){const i=cc.indexOf(n);if(i===-1){ok=false;break}cc.splice(i,1)}
   if(!ok){document.getElementById('p24Result').innerHTML='<span style="color:var(--danger)">❌ 请使用全部4张牌</span>';return}
   try{
@@ -641,9 +622,7 @@ function submit24(){
       if(S.daily.quiz24===5){S.food++;toast('完成5道24点！获得猫粮 🐟')}
       save();render();
       setTimeout(()=>{P24.cur++;P24.cur<5?show24Q():(closeModal('quiz24Modal'),toast(`24点结束！答对${P24.ok}/5`))},1000);
-    }else{
-      document.getElementById('p24Result').innerHTML=`<span style="color:var(--danger)">❌ = ${Number.isInteger(res)?res:res.toFixed(2)}，不是24哦</span>`;
-    }
+    }else{document.getElementById('p24Result').innerHTML=`<span style="color:var(--danger)">❌ = ${Number.isInteger(res)?res:res.toFixed(2)}，不是24哦</span>`}
   }catch(e){document.getElementById('p24Result').innerHTML='<span style="color:var(--danger)">⚠️ 表达式不完整</span>'}
 }
 
@@ -652,14 +631,12 @@ function renderTower(){
   document.getElementById('towerFloor').textContent=`第 ${S.towerCurrent+1} 层`;
   document.getElementById('towerBest').textContent=`最高纪录: 第 ${S.towerBest} 层`;
 }
-
 function startTower(){
-  const floor=S.towerCurrent+1;
-  const ts={qs:[],cur:0,ok:0,floor};
+  const floor=S.towerCurrent+1;const ts={qs:[],cur:0,ok:0,floor};
   for(let i=0;i<20;i++){
     const maxN=Math.min(19,Math.floor(3+floor*0.16+Math.random()*3));
-    const a=r(2,maxN),b=r(2,maxN),ans=a*b;
-    ts.qs.push({a,b,ans,opts:genOpts(ans,4)});
+    const a=r(2,maxN),b=r(2,maxN);
+    ts.qs.push({a,b,ans:a*b,opts:genOpts(a*b,4)});
   }
   window._ts=ts;
   document.getElementById('towerMain').style.display='none';
@@ -710,12 +687,11 @@ function renderColl(){
     </div>`;
   }).join('');
 }
-
 function showCatDetail(id){
   const c=ALL_CATS.find(x=>x.id===id);if(!c)return;
   const unlocked=S.unlocked.includes(id);
   const active=S.activeCat===id;
-  const unlockText=c.floor?`爬塔第 ${c.floor} 层解锁`:unlocked?'初始猫咪':'未解锁';
+  const unlockText=c.floor?`🗼 爬塔第 ${c.floor} 层解锁`:unlocked?'🏠 初始猫咪':'🔒 未解锁';
   document.getElementById('catDetail').innerHTML=`
     ${makeCatHTML(c.theme,2,active&&S.level>=10)}
     <div class="detail-name">${c.name}</div>
@@ -723,18 +699,14 @@ function showCatDetail(id){
     <div style="color:#888;font-size:.85em;margin:6px 0">${c.desc}</div>
     <div class="detail-unlock">${unlockText}</div>
     ${unlocked?`<div class="detail-actions">
-      <button class="btn ${active?'btn-ghost':'btn-primary'} btn-sm" onclick="switchCat('${id}')">${active?'当前使用中':'设为形象'}</button>
+      <button class="btn ${active?'btn-ghost':'btn-primary'} btn-sm" onclick="switchCat('${id}')">${active?'✅ 当前使用中':'设为形象'}</button>
     </div>`:''}
   `;
-  closeModal('collectionModal');
-  openModal('catDetailModal');
+  closeModal('collectionModal');openModal('catDetailModal');
 }
-
 function switchCat(id){
-  S.activeCat=id;save();render();
-  closeModal('catDetailModal');
-  const c=ALL_CATS.find(x=>x.id===id);
-  toast(`已切换为 ${c.name}！`);
+  S.activeCat=id;save();render();closeModal('catDetailModal');
+  toast(`已切换为 ${ALL_CATS.find(x=>x.id===id).name}！`);
 }
 
 // ===== TOAST =====
