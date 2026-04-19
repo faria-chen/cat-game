@@ -390,7 +390,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 <div class="modal-overlay" id="collectionModal"><div class="modal"><button class="modal-close" onclick="closeModal('collectionModal')">✕</button><h2>🐱 猫咪图鉴</h2><div class="collection-grid" id="collectionGrid"></div></div></div>
 
 <!-- CAT DETAIL -->
-<div class="modal-overlay" id="catDetailModal"><div class="modal"><button class="modal-close" onclick="closeModal('catDetailModal')">✕</button><div class="cat-detail" id="catDetail"></div></div></div>
+<div class="modal-overlay" id="catDetailModal"><div class="modal"><button class="modal-close" onclick="backToCollection()">✕</button><div class="cat-detail" id="catDetail"></div></div></div>
 
 <script>
 // ===== DATA =====
@@ -790,8 +790,10 @@ function showCatDetail(id){
   `;
   closeModal('collectionModal');openModal('catDetailModal');
 }
+function backToCollection(){closeModal('catDetailModal');openModal('collectionModal')}
 function switchCat(id){
   S.activeCat=id;save();render();closeModal('catDetailModal');
+  openModal('collectionModal');
   toast(`已切换为 ${ALL_CATS.find(x=>x.id===id).name}！`);
 }
 
