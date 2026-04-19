@@ -2,969 +2,746 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>一起来养猫 🐱</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-:root {
-  --bg: #fef6e4;
-  --card: #fff;
-  --primary: #f582ae;
-  --secondary: #8bd3dd;
-  --accent: #f3d2c1;
-  --text: #172c66;
-  --success: #2ec4b6;
-  --gold: #ffbe0b;
-  --danger: #e63946;
-}
-body {
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--bg:#fef9ef;--card:#fff;--pink:#ff8fab;--pink2:#ff5c8a;--blue:#a2d2ff;--mint:#b8e0d2;--gold:#ffd166;--orange:#f4845f;--text:#2b2d42;--success:#06d6a0;--danger:#ef476f;--shadow:0 4px 20px rgba(0,0,0,.08)}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 
-/* ===== SCREENS ===== */
-.screen { display: none; min-height: 100vh; padding: 20px; }
-.screen.active { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+/* SCREENS */
+.screen{display:none;min-height:100vh;padding:20px 16px}
+.screen.active{display:flex;flex-direction:column;align-items:center}
 
-/* ===== WELCOME ===== */
-#welcome { text-align: center; }
-#welcome h1 { font-size: 2.5em; margin-bottom: 10px; }
-#welcome p { font-size: 1.1em; color: #666; margin-bottom: 30px; }
-.cat-picker { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-bottom: 30px; }
-.cat-option {
-  width: 120px; height: 120px; border: 3px solid #ddd; border-radius: 20px;
-  display: flex; align-items: center; justify-content: center; font-size: 60px;
-  cursor: pointer; transition: all 0.3s; background: var(--card);
-}
-.cat-option:hover, .cat-option.selected { border-color: var(--primary); transform: scale(1.1); box-shadow: 0 4px 15px rgba(245,130,174,0.3); }
-.name-input {
-  padding: 12px 24px; font-size: 1.2em; border: 2px solid #ddd; border-radius: 12px;
-  width: 280px; text-align: center; outline: none; margin-bottom: 20px;
-}
-.name-input:focus { border-color: var(--primary); }
-.btn {
-  padding: 12px 36px; font-size: 1.1em; border: none; border-radius: 12px;
-  cursor: pointer; font-weight: 600; transition: all 0.2s;
-}
-.btn-primary { background: var(--primary); color: #fff; }
-.btn-primary:hover { background: #e06a96; transform: translateY(-2px); }
-.btn-primary:disabled { background: #ccc; cursor: not-allowed; transform: none; }
-.btn-secondary { background: var(--secondary); color: var(--text); }
-.btn-secondary:hover { background: #6bc5d0; }
-.btn-gold { background: var(--gold); color: var(--text); }
-.btn-gold:hover { background: #e6a800; }
-.btn-sm { padding: 8px 18px; font-size: 0.9em; }
-.btn-danger { background: var(--danger); color: #fff; }
+/* WELCOME */
+#welcome{justify-content:center;text-align:center}
+#welcome h1{font-size:2.2em;margin-bottom:6px;background:linear-gradient(135deg,var(--pink2),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+#welcome .sub{color:#888;margin-bottom:28px;font-size:1em}
+.cat-picker{display:flex;gap:16px;justify-content:center;margin-bottom:28px;flex-wrap:wrap}
+.cat-option{width:110px;height:130px;border:3px solid #eee;border-radius:24px;cursor:pointer;transition:all .3s;background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;box-shadow:var(--shadow)}
+.cat-option:hover,.cat-option.selected{border-color:var(--pink);transform:scale(1.06);box-shadow:0 6px 25px rgba(255,143,171,.3)}
+.cat-option .cat-label{font-size:.8em;color:#888;font-weight:600}
+.name-input{padding:12px 20px;font-size:1.1em;border:2px solid #eee;border-radius:14px;width:260px;text-align:center;outline:none;margin-bottom:20px;transition:border .2s}
+.name-input:focus{border-color:var(--pink)}
+.btn{padding:12px 32px;font-size:1em;border:none;border-radius:14px;cursor:pointer;font-weight:700;transition:all .2s;letter-spacing:.5px}
+.btn-primary{background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;box-shadow:0 4px 15px rgba(255,92,138,.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,92,138,.4)}
+.btn-primary:disabled{background:#ccc;box-shadow:none;cursor:not-allowed;transform:none}
+.btn-sm{padding:8px 16px;font-size:.85em;border-radius:10px}
+.btn-secondary{background:var(--blue);color:var(--text)}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#ffb703);color:var(--text)}
+.btn-ghost{background:transparent;border:2px solid #ddd;color:var(--text)}
 
-/* ===== MAIN GAME ===== */
-#game { padding: 10px; max-width: 500px; margin: 0 auto; justify-content: flex-start; }
-.top-bar {
-  display: flex; justify-content: space-between; align-items: center; width: 100%;
-  padding: 10px 0; margin-bottom: 10px;
-}
-.cat-name-display { font-size: 1.4em; font-weight: 700; }
-.level-badge {
-  background: var(--gold); color: var(--text); padding: 4px 14px;
-  border-radius: 20px; font-weight: 700; font-size: 0.9em;
-}
-.stats-bar {
-  display: flex; gap: 10px; width: 100%; margin-bottom: 15px; flex-wrap: wrap;
-}
-.stat-item {
-  flex: 1; min-width: 80px; background: var(--card); border-radius: 12px;
-  padding: 8px 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
-.stat-item .label { font-size: 0.75em; color: #888; }
-.stat-item .value { font-size: 1.1em; font-weight: 700; }
-.growth-bar-container {
-  width: 100%; background: #e0e0e0; border-radius: 10px; height: 16px;
-  margin-bottom: 15px; overflow: hidden;
-}
-.growth-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--gold)); border-radius: 10px; transition: width 0.5s; }
+/* ===== CSS CAT ===== */
+.css-cat{position:relative;display:inline-block;transition:all .4s}
+.css-cat.stage-1{transform:scale(.7)}
+.css-cat.stage-2{transform:scale(1)}
+.css-cat.stage-3{transform:scale(1.25)}
+.cat-body-wrap{position:relative;width:100px;height:100px}
+.cat-body{width:80px;height:70px;border-radius:50% 50% 45% 45%;position:absolute;bottom:0;left:10px}
+.cat-head{width:65px;height:55px;border-radius:50% 50% 45% 45%;position:absolute;top:0;left:17.5px;z-index:2}
+.cat-ear{width:0;height:0;position:absolute;top:-8px;z-index:3}
+.cat-ear-l{left:14px;border-left:12px solid transparent;border-right:12px solid transparent;border-bottom:20px solid}
+.cat-ear-r{right:14px;border-left:12px solid transparent;border-right:12px solid transparent;border-bottom:20px solid}
+.cat-ear-inner{width:0;height:0;position:absolute;top:-4px;z-index:4}
+.cat-ear-inner-l{left:18px;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:13px solid}
+.cat-ear-inner-r{right:18px;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:13px solid}
+.cat-eye{width:12px;height:14px;background:#2b2d42;border-radius:50%;position:absolute;top:22px;z-index:5}
+.cat-eye::after{content:'';width:4px;height:4px;background:#fff;border-radius:50%;position:absolute;top:3px;right:2px}
+.cat-eye-l{left:28px}
+.cat-eye-r{right:28px}
+.cat-nose{width:7px;height:5px;background:var(--pink2);border-radius:50% 50% 40% 40%;position:absolute;top:34px;left:50%;transform:translateX(-50%);z-index:5}
+.cat-mouth{position:absolute;top:38px;left:50%;transform:translateX(-50%);z-index:5}
+.cat-mouth::before,.cat-mouth::after{content:'';width:8px;height:5px;border-bottom:2px solid #999;border-radius:0 0 50% 50%;position:absolute;top:0}
+.cat-mouth::before{left:-8px}
+.cat-mouth::after{left:1px}
+.cat-whisker{position:absolute;height:1.5px;background:#aaa;z-index:5;width:20px;top:35px}
+.cat-w1{left:-4px;transform:rotate(-10deg)}
+.cat-w2{left:-4px;top:40px;transform:rotate(10deg)}
+.cat-w3{right:-4px;transform:rotate(10deg)}
+.cat-w4{right:-4px;top:40px;transform:rotate(-10deg)}
+.cat-tail{width:40px;height:8px;border-radius:0 8px 8px 0;position:absolute;bottom:15px;right:-25px;transform-origin:left center;animation:tailWag 2s ease-in-out infinite;z-index:1}
+@keyframes tailWag{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(15deg)}}
+.cat-paw{width:16px;height:12px;border-radius:50%;position:absolute;bottom:-4px;z-index:3}
+.cat-paw-l{left:18px}
+.cat-paw-r{right:18px}
+.crown-wrap{position:absolute;top:-30px;left:50%;transform:translateX(-50%);z-index:10;font-size:28px;animation:crownFloat 2s ease-in-out infinite}
+@keyframes crownFloat{0%,100%{transform:translateX(-50%) translateY(0) rotate(-3deg)}50%{transform:translateX(-50%) translateY(-6px) rotate(3deg)}}
+@keyframes catBounce{0%{transform:translateY(0)}30%{transform:translateY(-15px)}50%{transform:translateY(0)}70%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+.css-cat.bounce{animation:catBounce .5s ease}
+@keyframes catIdle{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.cat-body-wrap{animation:catIdle 2.5s ease-in-out infinite}
 
-/* Cat display */
-.cat-stage {
-  width: 100%; text-align: center; padding: 20px 0; margin-bottom: 15px;
-  position: relative;
-}
-.cat-display {
-  font-size: 100px; transition: all 0.5s; display: inline-block;
-  animation: idle 2s ease-in-out infinite;
-}
-.cat-display.stage-1 { font-size: 80px; }
-.cat-display.stage-2 { font-size: 110px; }
-.cat-display.stage-3 { font-size: 140px; }
-.crown { position: absolute; top: 0; font-size: 40px; animation: float 1.5s ease-in-out infinite; }
-@keyframes idle { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-@keyframes float { 0%,100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-10px) rotate(5deg); } }
-@keyframes bounce { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
-.cat-display.bounce { animation: bounce 0.4s ease; }
+/* Color themes */
+.theme-orange .cat-body,.theme-orange .cat-head{background:#f4a261}
+.theme-orange .cat-ear-l,.theme-orange .cat-ear-r{border-bottom-color:#f4a261}
+.theme-orange .cat-ear-inner-l,.theme-orange .cat-ear-inner-r{border-bottom-color:#ffb4a2}
+.theme-orange .cat-tail{background:#e08f4e}
+.theme-orange .cat-paw{background:#e08f4e}
 
-/* Mood bubble */
-.mood-bubble {
-  background: var(--card); padding: 6px 16px; border-radius: 20px;
-  font-size: 0.9em; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  margin-bottom: 10px; display: inline-block;
-}
+.theme-black .cat-body,.theme-black .cat-head{background:#4a4e69}
+.theme-black .cat-ear-l,.theme-black .cat-ear-r{border-bottom-color:#4a4e69}
+.theme-black .cat-ear-inner-l,.theme-black .cat-ear-inner-r{border-bottom-color:#6b6f8a}
+.theme-black .cat-tail{background:#3a3d56}
+.theme-black .cat-paw{background:#3a3d56}
 
-/* Action grid */
-.action-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-  width: 100%; margin-bottom: 15px;
-}
-.action-btn {
-  background: var(--card); border: 2px solid transparent; border-radius: 16px;
-  padding: 16px 10px; text-align: center; cursor: pointer; transition: all 0.2s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
-.action-btn:hover { transform: translateY(-3px); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-.action-btn:active { transform: scale(0.96); }
-.action-btn .icon { font-size: 32px; display: block; margin-bottom: 6px; }
-.action-btn .text { font-size: 0.9em; font-weight: 600; }
-.action-btn .count { font-size: 0.75em; color: #888; margin-top: 2px; }
-.action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-.action-btn:disabled:hover { transform: none; }
+.theme-white .cat-body,.theme-white .cat-head{background:#f0e6d3}
+.theme-white .cat-ear-l,.theme-white .cat-ear-r{border-bottom-color:#f0e6d3}
+.theme-white .cat-ear-inner-l,.theme-white .cat-ear-inner-r{border-bottom-color:#fce4d8}
+.theme-white .cat-tail{background:#e0d6c3}
+.theme-white .cat-paw{background:#e0d6c3}
 
-/* Menu buttons */
-.menu-row { display: flex; gap: 10px; width: 100%; margin-bottom: 10px; }
-.menu-btn {
-  flex: 1; background: var(--card); border: none; border-radius: 12px;
-  padding: 12px; cursor: pointer; font-weight: 600; transition: all 0.2s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06); font-size: 0.95em;
-}
-.menu-btn:hover { transform: translateY(-2px); }
-.menu-btn .badge {
-  background: var(--danger); color: #fff; font-size: 0.7em; padding: 2px 6px;
-  border-radius: 8px; margin-left: 4px;
-}
+.theme-grey .cat-body,.theme-grey .cat-head{background:#adb5bd}
+.theme-grey .cat-ear-l,.theme-grey .cat-ear-r{border-bottom-color:#adb5bd}
+.theme-grey .cat-ear-inner-l,.theme-grey .cat-ear-inner-r{border-bottom-color:#d0d5db}
+.theme-grey .cat-tail{background:#9aa0a8}
+.theme-grey .cat-paw{background:#9aa0a8}
 
-/* ===== MODAL ===== */
-.modal-overlay {
-  display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center;
-}
-.modal-overlay.active { display: flex; }
-.modal {
-  background: var(--bg); border-radius: 20px; padding: 24px; width: 90%;
-  max-width: 420px; max-height: 85vh; overflow-y: auto; position: relative;
-}
-.modal h2 { text-align: center; margin-bottom: 16px; }
-.modal-close {
-  position: absolute; top: 12px; right: 16px; background: none; border: none;
-  font-size: 1.5em; cursor: pointer; color: #888;
-}
+.theme-siamese .cat-body,.theme-siamese .cat-head{background:#f5e6ca}
+.theme-siamese .cat-ear-l,.theme-siamese .cat-ear-r{border-bottom-color:#8b6f4e}
+.theme-siamese .cat-ear-inner-l,.theme-siamese .cat-ear-inner-r{border-bottom-color:#c9a87c}
+.theme-siamese .cat-tail{background:#8b6f4e}
+.theme-siamese .cat-paw{background:#8b6f4e}
 
-/* ===== DAILY TASKS ===== */
-.task-item {
-  background: var(--card); border-radius: 12px; padding: 12px 16px;
-  margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;
-}
-.task-item.done { opacity: 0.5; }
-.task-reward { font-size: 0.85em; color: var(--success); font-weight: 600; }
+.theme-persian .cat-body,.theme-persian .cat-head{background:#e8e0f0}
+.theme-persian .cat-ear-l,.theme-persian .cat-ear-r{border-bottom-color:#d0c0e0}
+.theme-persian .cat-ear-inner-l,.theme-persian .cat-ear-inner-r{border-bottom-color:#e8d8f8}
+.theme-persian .cat-tail{background:#d0c0e0}
+.theme-persian .cat-paw{background:#d0c0e0}
 
-/* ===== QUIZ ===== */
-.quiz-area { text-align: center; }
-.quiz-progress { font-size: 0.9em; color: #888; margin-bottom: 12px; }
-.quiz-question {
-  font-size: 2em; font-weight: 700; margin: 20px 0; color: var(--text);
-}
-.quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
-.quiz-opt {
-  padding: 14px; font-size: 1.2em; font-weight: 600; border: 2px solid #ddd;
-  border-radius: 12px; background: var(--card); cursor: pointer; transition: all 0.2s;
-}
-.quiz-opt:hover { border-color: var(--primary); background: #fff5f7; }
-.quiz-opt.correct { border-color: var(--success); background: #e0f7f4; }
-.quiz-opt.wrong { border-color: var(--danger); background: #fde8ea; }
+.theme-ragdoll .cat-body{background:#f0f0f5}
+.theme-ragdoll .cat-head{background:#f0f0f5}
+.theme-ragdoll .cat-ear-l,.theme-ragdoll .cat-ear-r{border-bottom-color:#c8c8d8}
+.theme-ragdoll .cat-ear-inner-l,.theme-ragdoll .cat-ear-inner-r{border-bottom-color:#e0d8f0}
+.theme-ragdoll .cat-tail{background:#c8c8d8}
+.theme-ragdoll .cat-paw{background:#c8c8d8}
 
-/* 24-point */
-.point24-input {
-  display: flex; gap: 8px; justify-content: center; align-items: center;
-  margin: 16px 0; flex-wrap: wrap;
-}
-.point24-input input {
-  width: 200px; padding: 10px; font-size: 1.1em; border: 2px solid #ddd;
-  border-radius: 10px; text-align: center; outline: none;
-}
-.point24-input input:focus { border-color: var(--primary); }
-.point24-cards { display: flex; gap: 10px; justify-content: center; margin: 16px 0; }
-.point24-card {
-  width: 55px; height: 75px; background: var(--card); border: 2px solid var(--primary);
-  border-radius: 10px; display: flex; align-items: center; justify-content: center;
-  font-size: 1.4em; font-weight: 700; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
+.theme-british .cat-body,.theme-british .cat-head{background:#7b8fa1}
+.theme-british .cat-ear-l,.theme-british .cat-ear-r{border-bottom-color:#7b8fa1}
+.theme-british .cat-ear-inner-l,.theme-british .cat-ear-inner-r{border-bottom-color:#a0b0c0}
+.theme-british .cat-tail{background:#6a7e8f}
+.theme-british .cat-paw{background:#6a7e8f}
 
-/* ===== TOWER ===== */
-.tower-display { text-align: center; }
-.tower-floor { font-size: 3em; font-weight: 700; color: var(--gold); margin: 10px 0; }
-.tower-info { color: #666; margin-bottom: 16px; }
-.tower-progress-bar {
-  width: 100%; height: 8px; background: #e0e0e0; border-radius: 4px; margin-bottom: 16px;
-  overflow: hidden;
-}
-.tower-progress-fill { height: 100%; background: var(--success); transition: width 0.3s; }
+.theme-american .cat-body{background:#c0c0c0}
+.theme-american .cat-head{background:#c0c0c0}
+.theme-american .cat-ear-l,.theme-american .cat-ear-r{border-bottom-color:#a0a0a0}
+.theme-american .cat-ear-inner-l,.theme-american .cat-ear-inner-r{border-bottom-color:#d8d8d8}
+.theme-american .cat-tail{background:#a8a8a8}
+.theme-american .cat-paw{background:#a8a8a8}
+.theme-american .cat-body{background:repeating-linear-gradient(90deg,#c0c0c0,#c0c0c0 8px,#a8a8a8 8px,#a8a8a8 10px)}
 
-/* ===== CAT COLLECTION ===== */
-.collection-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-.collection-item {
-  background: var(--card); border-radius: 12px; padding: 12px; text-align: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06); cursor: pointer; transition: all 0.2s;
-  border: 2px solid transparent;
-}
-.collection-item:hover { transform: translateY(-2px); }
-.collection-item.active { border-color: var(--primary); }
-.collection-item.locked { opacity: 0.4; filter: grayscale(1); }
-.collection-item .cat-emoji { font-size: 36px; }
-.collection-item .cat-breed { font-size: 0.8em; margin-top: 4px; color: #666; }
+.theme-maine .cat-body,.theme-maine .cat-head{background:#a0724a}
+.theme-maine .cat-ear-l,.theme-maine .cat-ear-r{border-bottom-color:#a0724a}
+.theme-maine .cat-ear-inner-l,.theme-maine .cat-ear-inner-r{border-bottom-color:#c0906a}
+.theme-maine .cat-tail{background:#8a6040}
+.theme-maine .cat-paw{background:#8a6040}
+
+.theme-fold .cat-body,.theme-fold .cat-head{background:#d4c4a8}
+.theme-fold .cat-ear-l,.theme-fold .cat-ear-r{border-bottom-color:#d4c4a8;top:4px}
+.theme-fold .cat-ear-inner-l,.theme-fold .cat-ear-inner-r{border-bottom-color:#e0d0b8;top:6px}
+.theme-fold .cat-tail{background:#c0b090}
+.theme-fold .cat-paw{background:#c0b090}
+
+.theme-blue .cat-body,.theme-blue .cat-head{background:#6b9ac4}
+.theme-blue .cat-ear-l,.theme-blue .cat-ear-r{border-bottom-color:#6b9ac4}
+.theme-blue .cat-ear-inner-l,.theme-blue .cat-ear-inner-r{border-bottom-color:#8ab4e0}
+.theme-blue .cat-tail{background:#5a88b0}
+.theme-blue .cat-paw{background:#5a88b0}
+
+.theme-bengal .cat-body{background:#e8a838}
+.theme-bengal .cat-head{background:#e8a838}
+.theme-bengal .cat-ear-l,.theme-bengal .cat-ear-r{border-bottom-color:#c88828}
+.theme-bengal .cat-ear-inner-l,.theme-bengal .cat-ear-inner-r{border-bottom-color:#f0c060}
+.theme-bengal .cat-tail{background:#c88828}
+.theme-bengal .cat-paw{background:#c88828}
+.theme-bengal .cat-body{background:radial-gradient(circle at 20% 30%,#c88828 3px,transparent 3px),radial-gradient(circle at 60% 20%,#c88828 2px,transparent 2px),radial-gradient(circle at 40% 60%,#c88828 3px,transparent 3px),radial-gradient(circle at 70% 70%,#c88828 2px,transparent 2px),#e8a838}
+
+.theme-lion .cat-body,.theme-lion .cat-head{background:#d4a030}
+.theme-lion .cat-ear-l,.theme-lion .cat-ear-r{border-bottom-color:#d4a030}
+.theme-lion .cat-ear-inner-l,.theme-lion .cat-ear-inner-r{border-bottom-color:#e8b840}
+.theme-lion .cat-tail{background:#c09020}
+.theme-lion .cat-paw{background:#c09020}
+.theme-lion .cat-head{box-shadow:0 0 0 8px rgba(180,120,20,.4),0 0 0 14px rgba(180,120,20,.2)}
+
+/* ===== GAME SCREEN ===== */
+#game{max-width:480px;width:100%;margin:0 auto;padding:12px;justify-content:flex-start}
+.top-bar{display:flex;justify-content:space-between;align-items:center;width:100%;padding:8px 0}
+.cat-name-display{font-size:1.3em;font-weight:800}
+.level-badge{background:linear-gradient(135deg,var(--gold),#ffb703);color:var(--text);padding:4px 14px;border-radius:20px;font-weight:800;font-size:.85em;box-shadow:0 2px 8px rgba(255,209,102,.4)}
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:100%;margin:10px 0}
+.stat-item{background:var(--card);border-radius:14px;padding:8px 4px;text-align:center;box-shadow:var(--shadow)}
+.stat-item .label{font-size:.7em;color:#aaa}
+.stat-item .value{font-size:1.1em;font-weight:800}
+.growth-wrap{width:100%;margin-bottom:8px}
+.growth-bar-bg{width:100%;background:#eee;border-radius:10px;height:14px;overflow:hidden}
+.growth-bar{height:100%;background:linear-gradient(90deg,var(--pink),var(--gold));border-radius:10px;transition:width .5s}
+.growth-text{text-align:center;font-size:.75em;color:#aaa;margin-top:3px}
+.cat-stage{width:100%;text-align:center;padding:10px 0 5px;position:relative;display:flex;justify-content:center;align-items:center;min-height:140px}
+.mood-bubble{background:var(--card);padding:6px 16px;border-radius:20px;font-size:.85em;box-shadow:var(--shadow);margin-bottom:12px;display:inline-block;color:#666}
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;margin-bottom:12px}
+.action-btn{background:var(--card);border:2px solid transparent;border-radius:18px;padding:16px 8px;text-align:center;cursor:pointer;transition:all .2s;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.action-btn::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;opacity:0;transition:opacity .2s;border-radius:16px}
+.action-btn:nth-child(1)::before{background:var(--gold)}
+.action-btn:nth-child(2)::before{background:var(--blue)}
+.action-btn:nth-child(3)::before{background:var(--pink)}
+.action-btn:nth-child(4)::before{background:var(--mint)}
+.action-btn:hover::before{opacity:.1}
+.action-btn:active{transform:scale(.95)}
+.action-btn .icon{font-size:28px;display:block;margin-bottom:4px}
+.action-btn .text{font-size:.85em;font-weight:700}
+.action-btn .count{font-size:.7em;color:#aaa;margin-top:2px}
+.action-btn:disabled{opacity:.35;cursor:not-allowed}
+.action-btn:disabled:active{transform:none}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;margin-bottom:20px}
+.menu-btn{background:var(--card);border:none;border-radius:16px;padding:14px 8px;cursor:pointer;font-weight:700;font-size:.9em;transition:all .2s;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;gap:4px}
+.menu-btn:active{transform:scale(.96)}
+.menu-btn .menu-icon{font-size:24px}
+.menu-btn .badge{background:var(--danger);color:#fff;font-size:.65em;padding:2px 6px;border-radius:8px;position:absolute;top:8px;right:8px}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.45);z-index:100;align-items:center;justify-content:center;padding:16px}
+.modal-overlay.active{display:flex}
+.modal{background:var(--bg);border-radius:24px;padding:24px 20px;width:100%;max-width:420px;max-height:88vh;overflow-y:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal h2{text-align:center;margin-bottom:16px;font-size:1.2em}
+.modal-close{position:absolute;top:14px;right:16px;background:rgba(0,0,0,.06);border:none;width:32px;height:32px;border-radius:50%;font-size:1.1em;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#888;transition:all .2s}
+.modal-close:hover{background:rgba(0,0,0,.12)}
+
+/* DAILY */
+.task-item{background:var(--card);border-radius:14px;padding:14px 16px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.task-item.done{opacity:.5}
+.task-left .task-name{font-weight:700;font-size:.95em}
+.task-left .task-desc{font-size:.78em;color:#999;margin-top:2px}
+.task-reward{font-size:.85em;font-weight:700;color:var(--success)}
+
+/* QUIZ */
+.quiz-progress{font-size:.85em;color:#aaa;margin-bottom:8px}
+.quiz-question{font-size:2.2em;font-weight:800;margin:16px 0;text-align:center}
+.quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.quiz-opt{padding:14px;font-size:1.15em;font-weight:700;border:2.5px solid #eee;border-radius:14px;background:var(--card);cursor:pointer;transition:all .15s;text-align:center}
+.quiz-opt:active{transform:scale(.96)}
+.quiz-opt.correct{border-color:var(--success);background:#e6fff7;color:var(--success)}
+.quiz-opt.wrong{border-color:var(--danger);background:#ffe6ec;color:var(--danger)}
+
+/* 24 POINT */
+.p24-cards{display:flex;gap:10px;justify-content:center;margin:16px 0}
+.p24-card{width:60px;height:80px;background:linear-gradient(135deg,#fff,#f8f8ff);border:2.5px solid var(--pink);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.6em;font-weight:800;box-shadow:0 4px 15px rgba(255,143,171,.2)}
+.p24-calculator{margin-top:12px}
+.p24-display{background:var(--card);border-radius:12px;padding:12px;text-align:center;font-size:1.3em;font-weight:700;min-height:48px;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 2px 4px rgba(0,0,0,.06);margin-bottom:10px;letter-spacing:2px;word-break:break-all;flex-wrap:wrap;gap:4px}
+.p24-display .token{display:inline-block;padding:2px 6px;border-radius:6px}
+.p24-display .num-token{background:var(--blue);color:var(--text)}
+.p24-display .op-token{background:var(--pink);color:#fff}
+.p24-keypad{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.p24-key{padding:12px 4px;font-size:1em;font-weight:700;border:2px solid #eee;border-radius:10px;background:var(--card);cursor:pointer;transition:all .15s;text-align:center}
+.p24-key:active{transform:scale(.93);background:#f0f0f0}
+.p24-key.op{background:var(--pink);color:#fff;border-color:var(--pink)}
+.p24-key.op:active{background:var(--pink2)}
+.p24-key.action{background:var(--blue);border-color:var(--blue)}
+.p24-key.del{background:var(--danger);color:#fff;border-color:var(--danger)}
+.p24-result{text-align:center;margin-top:10px;font-weight:700;font-size:.95em;min-height:24px}
+
+/* TOWER */
+.tower-info{text-align:center}
+.tower-floor-num{font-size:3em;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.tower-best{color:#aaa;font-size:.85em;margin:4px 0 12px}
+.tower-desc{color:#666;font-size:.85em;margin-bottom:16px;line-height:1.5}
+.tower-progress-bar{width:100%;height:6px;background:#eee;border-radius:3px;margin-bottom:12px;overflow:hidden}
+.tower-progress-fill{height:100%;background:linear-gradient(90deg,var(--success),var(--mint));transition:width .3s}
+
+/* COLLECTION */
+.collection-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.collection-item{background:var(--card);border-radius:16px;padding:12px 8px;text-align:center;cursor:pointer;transition:all .2s;border:2.5px solid transparent;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.collection-item:active{transform:scale(.96)}
+.collection-item.active{border-color:var(--pink)}
+.collection-item.locked{opacity:.35;filter:grayscale(1)}
+.collection-mini-cat{width:50px;height:50px;margin:0 auto 6px;position:relative;transform:scale(.5);transform-origin:center top}
+.collection-item .breed-name{font-size:.75em;color:#666;font-weight:600}
+.collection-item .unlock-info{font-size:.65em;color:#aaa;margin-top:2px}
+
+/* Cat detail modal */
+.cat-detail{text-align:center;padding:10px 0}
+.cat-detail .detail-name{font-size:1.2em;font-weight:800;margin-top:8px}
+.cat-detail .detail-breed{color:#888;font-size:.9em;margin:4px 0}
+.cat-detail .detail-unlock{color:var(--pink);font-size:.85em;margin:8px 0}
+.cat-detail .detail-actions{display:flex;gap:8px;justify-content:center;margin-top:14px}
 
 /* Toast */
-.toast {
-  position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
-  background: var(--text); color: #fff; padding: 12px 24px; border-radius: 12px;
-  font-weight: 600; z-index: 200; transition: transform 0.3s; font-size: 0.95em;
-}
-.toast.show { transform: translateX(-50%) translateY(0); }
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-120px);background:var(--text);color:#fff;padding:12px 24px;border-radius:14px;font-weight:700;z-index:300;transition:transform .3s;font-size:.9em;max-width:85%;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.2)}
+.toast.show{transform:translateX(-50%) translateY(0)}
 
 /* Responsive */
-@media (max-width: 400px) {
-  .action-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
-  .cat-display { font-size: 80px !important; }
-  .cat-display.stage-3 { font-size: 110px !important; }
-}
+@media(max-width:380px){.action-grid{gap:8px}.p24-key{padding:10px 2px;font-size:.9em}}
 </style>
 </head>
 <body>
-
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
-<!-- ===== WELCOME SCREEN ===== -->
+<!-- WELCOME -->
 <div class="screen active" id="welcome">
   <h1>🐱 一起来养猫</h1>
-  <p>选择你的第一只猫咪伙伴</p>
+  <p class="sub">选择你的第一只猫咪伙伴</p>
   <div class="cat-picker" id="catPicker"></div>
-  <input class="name-input" id="catNameInput" placeholder="给猫咪取个名字吧" maxlength="8">
+  <input class="name-input" id="catNameInput" placeholder="给猫咪取个名字" maxlength="8">
   <button class="btn btn-primary" id="startBtn" onclick="startGame()">开始养猫 🎉</button>
 </div>
 
-<!-- ===== MAIN GAME SCREEN ===== -->
+<!-- GAME -->
 <div class="screen" id="game">
   <div class="top-bar">
     <span class="cat-name-display" id="displayName"></span>
     <span class="level-badge" id="displayLevel">Lv.1</span>
   </div>
-  
   <div class="stats-bar">
     <div class="stat-item"><div class="label">🐟 猫粮</div><div class="value" id="statFood">0</div></div>
     <div class="stat-item"><div class="label">💧 水</div><div class="value" id="statWater">0</div></div>
     <div class="stat-item"><div class="label">🧶 猫条</div><div class="value" id="statTreat">0</div></div>
     <div class="stat-item"><div class="label">🛁 洗澡</div><div class="value" id="statBath">0</div></div>
   </div>
-  
-  <div class="growth-bar-container">
-    <div class="growth-bar" id="growthBar" style="width:0%"></div>
+  <div class="growth-wrap">
+    <div class="growth-bar-bg"><div class="growth-bar" id="growthBar" style="width:0%"></div></div>
+    <div class="growth-text" id="growthText">成长值: 0/100</div>
   </div>
-  <div style="text-align:center;font-size:0.8em;color:#888;margin-bottom:10px" id="growthText">成长值: 0/100</div>
-  
   <div class="cat-stage" id="catStage">
-    <div class="cat-display" id="catDisplay">🐱</div>
+    <div class="css-cat stage-1" id="catDisplay"></div>
   </div>
   <div class="mood-bubble" id="moodBubble">喵~ 你好呀！</div>
-  
   <div class="action-grid">
-    <button class="action-btn" onclick="doFeed()">
-      <span class="icon">🐟</span>
-      <span class="text">喂猫粮</span>
-      <span class="count" id="feedCount">×0</span>
-    </button>
-    <button class="action-btn" onclick="doWater()">
-      <span class="icon">💧</span>
-      <span class="text">喂水</span>
-      <span class="count" id="waterCount">×0</span>
-    </button>
-    <button class="action-btn" onclick="doTreat()">
-      <span class="icon">🧶</span>
-      <span class="text">喂猫条</span>
-      <span class="count" id="treatCount">×0</span>
-    </button>
-    <button class="action-btn" onclick="doBath()">
-      <span class="icon">🛁</span>
-      <span class="text">洗澡</span>
-      <span class="count" id="bathCount">×0</span>
-    </button>
+    <button class="action-btn" onclick="doFeed()"><span class="icon">🐟</span><span class="text">喂猫粮</span><span class="count" id="feedCount">×0</span></button>
+    <button class="action-btn" onclick="doWater()"><span class="icon">💧</span><span class="text">喂水</span><span class="count" id="waterCount">×0</span></button>
+    <button class="action-btn" onclick="doTreat()"><span class="icon">🧶</span><span class="text">喂猫条</span><span class="count" id="treatCount">×0</span></button>
+    <button class="action-btn" onclick="doBath()"><span class="icon">🛁</span><span class="text">洗澡</span><span class="count" id="bathCount">×0</span></button>
   </div>
-  
-  <div class="menu-row">
-    <button class="menu-btn" onclick="openModal('dailyModal')">📋 每日任务</button>
-    <button class="menu-btn" onclick="openModal('towerModal')">🗼 爬塔</button>
-  </div>
-  <div class="menu-row">
-    <button class="menu-btn" onclick="openModal('collectionModal')">🐱 猫咪图鉴</button>
-    <button class="menu-btn" onclick="openModal('quiz24Modal')">🃏 24点</button>
+  <div class="menu-grid">
+    <button class="menu-btn" onclick="openModal('dailyModal')"><span class="menu-icon">📋</span>每日任务</button>
+    <button class="menu-btn" onclick="openModal('towerModal')"><span class="menu-icon">🗼</span>爬塔挑战</button>
+    <button class="menu-btn" onclick="openModal('quiz24Modal')"><span class="menu-icon">🃏</span>算24点</button>
+    <button class="menu-btn" onclick="openModal('collectionModal')"><span class="menu-icon">📖</span>猫咪图鉴</button>
   </div>
 </div>
 
-<!-- ===== DAILY TASKS MODAL ===== -->
-<div class="modal-overlay" id="dailyModal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('dailyModal')">✕</button>
-    <h2>📋 每日任务</h2>
-    <div id="dailyTasksList"></div>
-  </div>
-</div>
+<!-- DAILY -->
+<div class="modal-overlay" id="dailyModal"><div class="modal"><button class="modal-close" onclick="closeModal('dailyModal')">✕</button><h2>📋 每日任务</h2><div id="dailyTasksList"></div></div></div>
 
-<!-- ===== QUIZ MODAL (Multiplication) ===== -->
-<div class="modal-overlay" id="quizModal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('quizModal')">✕</button>
-    <h2 id="quizTitle">算术挑战</h2>
-    <div class="quiz-area">
-      <div class="quiz-progress" id="quizProgress">1/10</div>
-      <div class="quiz-question" id="quizQuestion">3 × 7 = ?</div>
-      <div class="quiz-options" id="quizOptions"></div>
-    </div>
-  </div>
-</div>
+<!-- QUIZ MULTIPLICATION -->
+<div class="modal-overlay" id="quizModal"><div class="modal"><button class="modal-close" onclick="closeQuizModal()">✕</button><h2 id="quizTitle">算术挑战</h2><div class="quiz-progress" id="quizProgress">1/10</div><div class="quiz-question" id="quizQuestion"></div><div class="quiz-options" id="quizOptions"></div></div></div>
 
-<!-- ===== 24 POINT MODAL ===== -->
-<div class="modal-overlay" id="quiz24Modal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('quiz24Modal')">✕</button>
-    <h2>🃏 算24点</h2>
-    <div class="quiz-area" id="quiz24Area">
-      <div class="quiz-progress" id="p24Progress">1/5</div>
-      <div class="point24-cards" id="p24Cards"></div>
-      <p style="font-size:0.85em;color:#888;margin-bottom:8px">用 +−×÷ 和括号使这4张牌等于24</p>
-      <div class="point24-input">
-        <input id="p24Input" placeholder="例: (3+5)×(8-5)">
-        <button class="btn btn-primary btn-sm" onclick="submit24()">提交</button>
-      </div>
-      <button class="btn btn-secondary btn-sm" onclick="skip24()" style="margin-top:8px">跳过 →</button>
-      <div id="p24Result" style="margin-top:10px;font-weight:600"></div>
-    </div>
-  </div>
-</div>
+<!-- 24 POINT -->
+<div class="modal-overlay" id="quiz24Modal"><div class="modal"><button class="modal-close" onclick="closeModal('quiz24Modal')">✕</button><h2>🃏 算24点</h2><div class="quiz-progress" id="p24Progress">1/5</div><div class="p24-cards" id="p24Cards"></div><div class="p24-calculator"><div class="p24-display" id="p24Display">点击下方按钮输入</div><div class="p24-keypad" id="p24Keypad"></div><div class="p24-result" id="p24Result"></div></div></div></div>
 
-<!-- ===== TOWER MODAL ===== -->
-<div class="modal-overlay" id="towerModal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('towerModal')">✕</button>
-    <h2>🗼 乘法塔</h2>
-    <div class="tower-display" id="towerMain">
-      <div class="tower-floor" id="towerFloor">第 1 层</div>
-      <div class="tower-info" id="towerInfo">最高纪录: 第 1 层</div>
-      <p style="margin:12px 0;color:#666;font-size:0.9em">20道19以内乘法速算<br>答对15题通关 · 每10层解锁新品种</p>
-      <button class="btn btn-gold" onclick="startTower()">开始挑战 ⚔️</button>
-    </div>
-    <div class="tower-display" id="towerQuiz" style="display:none">
-      <div class="quiz-progress" id="towerProgress">1/20</div>
-      <div class="tower-progress-bar"><div class="tower-progress-fill" id="towerBar" style="width:0%"></div></div>
-      <div class="quiz-question" id="towerQuestion"></div>
-      <div class="quiz-options" id="towerOptions"></div>
-    </div>
+<!-- TOWER -->
+<div class="modal-overlay" id="towerModal"><div class="modal"><button class="modal-close" onclick="closeTowerModal()">✕</button><h2>🗼 乘法塔</h2>
+  <div id="towerMain" class="tower-info">
+    <div class="tower-floor-num" id="towerFloor">第 1 层</div>
+    <div class="tower-best" id="towerBest">最高纪录: 第 1 层</div>
+    <div class="tower-desc">20道19以内乘法速算<br>答对 ≥15 题通关 · 每10层解锁新品种猫咪</div>
+    <button class="btn btn-gold" onclick="startTower()">开始挑战 ⚔️</button>
   </div>
-</div>
+  <div id="towerQuiz" style="display:none">
+    <div class="quiz-progress" id="towerQProgress">1/20</div>
+    <div class="tower-progress-bar"><div class="tower-progress-fill" id="towerBar" style="width:0%"></div></div>
+    <div class="quiz-question" id="towerQuestion"></div>
+    <div class="quiz-options" id="towerOptions"></div>
+  </div>
+</div></div>
 
-<!-- ===== COLLECTION MODAL ===== -->
-<div class="modal-overlay" id="collectionModal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('collectionModal')">✕</button>
-    <h2>🐱 猫咪图鉴</h2>
-    <div class="collection-grid" id="collectionGrid"></div>
-    <p style="text-align:center;margin-top:12px;font-size:0.8em;color:#888">爬塔每10层解锁稀有品种</p>
-  </div>
-</div>
+<!-- COLLECTION -->
+<div class="modal-overlay" id="collectionModal"><div class="modal"><button class="modal-close" onclick="closeModal('collectionModal')">✕</button><h2>📖 猫咪图鉴</h2><div class="collection-grid" id="collectionGrid"></div></div></div>
+
+<!-- CAT DETAIL -->
+<div class="modal-overlay" id="catDetailModal"><div class="modal"><button class="modal-close" onclick="closeModal('catDetailModal')">✕</button><div class="cat-detail" id="catDetail"></div></div></div>
 
 <script>
-// ===== GAME DATA =====
-const BASIC_CATS = [
-  { id: 'orange', emoji: '🐱', name: '橘猫', breed: '经典橘猫' },
-  { id: 'black', emoji: '🐈‍⬛', name: '黑猫', breed: '神秘黑猫' },
-  { id: 'white', emoji: '🐈', name: '白猫', breed: '优雅白猫' },
-  { id: 'tabby', emoji: '😺', name: '狸花猫', breed: '中华狸花' },
+// ===== DATA =====
+const BASIC_CATS=[
+  {id:'orange',theme:'theme-orange',name:'橘猫',breed:'经典橘猫',desc:'贪吃爱睡的温暖小胖橘'},
+  {id:'black',theme:'theme-black',name:'黑猫',breed:'神秘黑猫',desc:'优雅神秘的暗夜精灵'},
+  {id:'white',theme:'theme-white',name:'白猫',breed:'优雅白猫',desc:'温柔如雪的小天使'},
+  {id:'grey',theme:'theme-grey',name:'灰猫',breed:'英短蓝灰',desc:'高冷但黏人的小灰灰'},
 ];
-
-const TOWER_CATS = [
-  { id: 't10', emoji: '😸', name: '暹罗猫', breed: '暹罗猫 · 10层', floor: 10 },
-  { id: 't20', emoji: '😹', name: '波斯猫', breed: '波斯猫 · 20层', floor: 20 },
-  { id: 't30', emoji: '😻', name: '布偶猫', breed: '布偶猫 · 30层', floor: 30 },
-  { id: 't40', emoji: '😼', name: '英短猫', breed: '英短蓝猫 · 40层', floor: 40 },
-  { id: 't50', emoji: '😽', name: '美短猫', breed: '美国短毛 · 50层', floor: 50 },
-  { id: 't60', emoji: '🙀', name: '缅因猫', breed: '缅因巨猫 · 60层', floor: 60 },
-  { id: 't70', emoji: '😿', name: '苏格兰折耳', breed: '折耳猫 · 70层', floor: 70 },
-  { id: 't80', emoji: '😾', name: '俄罗斯蓝猫', breed: '蓝猫 · 80层', floor: 80 },
-  { id: 't90', emoji: '🐱', name: '孟加拉豹猫', breed: '豹猫 · 90层', floor: 90 },
-  { id: 't100', emoji: '🦁', name: '狮子猫', breed: '狮王 · 100层', floor: 100 },
+const TOWER_CATS=[
+  {id:'t10',theme:'theme-siamese',name:'暹罗猫',breed:'暹罗猫',floor:10,desc:'话多爱聊的贵族猫'},
+  {id:'t20',theme:'theme-persian',name:'波斯猫',breed:'波斯猫',floor:20,desc:'雍容华贵的长毛公主'},
+  {id:'t30',theme:'theme-ragdoll',name:'布偶猫',breed:'布偶猫',floor:30,desc:'仙气飘飘的小仙女'},
+  {id:'t40',theme:'theme-british',name:'英短猫',breed:'英短蓝猫',floor:40,desc:'圆润敦厚的蓝胖子'},
+  {id:'t50',theme:'theme-american',name:'美短猫',breed:'美国短毛',floor:50,desc:'活泼好动的斑纹猎手'},
+  {id:'t60',theme:'theme-maine',name:'缅因猫',breed:'缅因巨猫',floor:60,desc:'温柔的巨兽之王'},
+  {id:'t70',theme:'theme-fold',name:'折耳猫',breed:'苏格兰折耳',floor:70,desc:'萌到犯规的小精灵'},
+  {id:'t80',theme:'theme-blue',name:'俄罗斯蓝猫',breed:'俄罗斯蓝猫',floor:80,desc:'翠绿眼眸的冰美人'},
+  {id:'t90',theme:'theme-bengal',name:'孟加拉豹猫',breed:'孟加拉豹猫',floor:90,desc:'野性十足的小猎豹'},
+  {id:'t100',theme:'theme-lion',name:'狮子猫',breed:'🦁 狮王',floor:100,desc:'万猫之王，威风凛凛'},
 ];
+const ALL_CATS=[...BASIC_CATS,...TOWER_CATS];
 
-const ALL_CATS = [...BASIC_CATS, ...TOWER_CATS];
-
-const MOODS = {
-  hungry: ['好饿呀...😢', '肚子咕咕叫了...', '想吃猫粮！'],
-  thirsty: ['好渴...', '水呢水呢？💧', '渴死了啦...'],
-  happy: ['好开心呀！✨', '最喜欢你了~', '喵喵喵~🎵', '今天心情超好！'],
-  dirty: ['身上脏脏的...', '想洗澡~', '臭臭的了...'],
-  idle: ['喵~ 你好呀！', '今天天气真好', '想出去玩~', '要不要摸摸头？', '呼噜呼噜~'],
-  fed: ['好吃好吃！😋', '太美味了！', '谢谢款待~'],
-  bathed: ['干干净净！✨', '好香呀~', '变漂亮啦！'],
+const MOODS={
+  hungry:['好饿呀...😢','肚子咕咕叫了','想吃猫粮！🐟'],
+  thirsty:['好渴...','水呢水呢？💧','渴死啦...'],
+  happy:['好开心呀！✨','最喜欢你了~','喵喵喵~🎵','心情超好！','呼噜呼噜~'],
+  dirty:['身上脏脏的...','想洗澡~','臭臭的了...'],
+  idle:['喵~ 你好呀！','要不要摸摸头？','想出去玩~','今天天气真好☀️'],
+  fed:['好吃好吃！😋','太美味啦！','谢谢款待~'],
+  bathed:['干干净净！✨','好香呀~','变漂亮啦！'],
 };
 
-// ===== GAME STATE =====
-let state = {
-  started: false,
-  cat: { name: '', type: 'orange', emoji: '🐱' },
-  level: 1,
-  growth: 0,
-  food: 0,
-  water: 0,
-  treats: 0,
-  baths: 0,
-  lastCheckIn: '',
-  daily: { checkin: false, quiz24: 0, quizMul10: 0, quizMul19: 0 },
-  towerBest: 0,
-  towerCurrent: 0,
-  unlockedCats: ['orange', 'black', 'white', 'tabby'],
-  activeCat: 'orange',
-  lastPlayDate: '',
-};
+// ===== STATE =====
+let S={started:false,cat:{name:'',type:'orange'},level:1,growth:0,food:0,water:0,treats:0,baths:0,lastCheckIn:'',daily:{checkin:false,quiz24:0,quizMul10:0,quizMul19:0},towerBest:0,towerCurrent:0,unlocked:['orange','black','white','grey'],activeCat:'orange',lastDate:''};
+function load(){try{const s=localStorage.getItem('catGame2');if(s)S=JSON.parse(s)}catch(e){}}
+function save(){localStorage.setItem('catGame2',JSON.stringify(S))}
+load();
 
-// Load state
-function loadState() {
-  try {
-    const s = localStorage.getItem('catGame');
-    if (s) state = JSON.parse(s);
-  } catch(e) {}
+function checkDay(){const t=new Date().toLocaleDateString();if(S.lastDate!==t){S.daily={checkin:false,quiz24:0,quizMul10:0,quizMul19:0};S.lastDate=t;save()}}
+
+// ===== CAT HTML GENERATOR =====
+function makeCatHTML(theme,stage=1,crowned=false){
+  return `<div class="css-cat ${theme} stage-${stage}">${crowned?'<div class="crown-wrap">👑</div>':''}<div class="cat-body-wrap">
+    <div class="cat-ear-l"></div><div class="cat-ear-r"></div>
+    <div class="cat-ear-inner-l"></div><div class="cat-ear-inner-r"></div>
+    <div class="cat-head"></div>
+    <div class="cat-eye cat-eye-l"></div><div class="cat-eye cat-eye-r"></div>
+    <div class="cat-nose"></div><div class="cat-mouth"></div>
+    <div class="cat-whisker cat-w1"></div><div class="cat-whisker cat-w2"></div>
+    <div class="cat-whisker cat-w3"></div><div class="cat-whisker cat-w4"></div>
+    <div class="cat-body"></div>
+    <div class="cat-tail"></div>
+    <div class="cat-paw cat-paw-l"></div><div class="cat-paw cat-paw-r"></div>
+  </div></div>`;
 }
-function saveState() {
-  localStorage.setItem('catGame', JSON.stringify(state));
+
+function makeMiniCat(theme){
+  return `<div class="collection-mini-cat"><div class="css-cat ${theme} stage-1"><div class="cat-body-wrap">
+    <div class="cat-ear-l"></div><div class="cat-ear-r"></div>
+    <div class="cat-ear-inner-l"></div><div class="cat-ear-inner-r"></div>
+    <div class="cat-head"></div>
+    <div class="cat-eye cat-eye-l"></div><div class="cat-eye cat-eye-r"></div>
+    <div class="cat-nose"></div><div class="cat-mouth"></div>
+    <div class="cat-body"></div><div class="cat-tail"></div>
+    <div class="cat-paw cat-paw-l"></div><div class="cat-paw cat-paw-r"></div>
+  </div></div></div>`;
 }
 
 // ===== INIT =====
-loadState();
-
-// Check new day reset
-function checkNewDay() {
-  const today = new Date().toLocaleDateString();
-  if (state.lastPlayDate !== today) {
-    state.daily = { checkin: false, quiz24: 0, quizMul10: 0, quizMul19: 0 };
-    state.lastPlayDate = today;
-    saveState();
-  }
+let selIdx=0;
+function initPicker(){
+  document.getElementById('catPicker').innerHTML=BASIC_CATS.map((c,i)=>`
+    <div class="cat-option ${i===0?'selected':''}" onclick="selCat(this,${i})">
+      ${makeCatHTML(c.theme,1)}
+      <span class="cat-label">${c.name}</span>
+    </div>`).join('');
 }
+function selCat(el,i){document.querySelectorAll('.cat-option').forEach(e=>e.classList.remove('selected'));el.classList.add('selected');selIdx=i}
 
-// Init picker
-function initPicker() {
-  const picker = document.getElementById('catPicker');
-  picker.innerHTML = BASIC_CATS.map((c, i) =>
-    `<div class="cat-option ${i===0?'selected':''}" data-idx="${i}" onclick="selectCat(this,${i})">${c.emoji}</div>`
-  ).join('');
-}
-let selectedCatIdx = 0;
-function selectCat(el, idx) {
-  document.querySelectorAll('.cat-option').forEach(e => e.classList.remove('selected'));
-  el.classList.add('selected');
-  selectedCatIdx = idx;
+function startGame(){
+  const name=document.getElementById('catNameInput').value.trim();
+  if(!name){toast('请给猫咪取个名字~');return}
+  const c=BASIC_CATS[selIdx];
+  S.cat={name,type:c.id};S.started=true;S.lastDate=new Date().toLocaleDateString();
+  save();showScreen('game');render();
 }
 
-function startGame() {
-  const name = document.getElementById('catNameInput').value.trim();
-  if (!name) { toast('请给猫咪取个名字~'); return; }
-  const cat = BASIC_CATS[selectedCatIdx];
-  state.cat = { name, type: cat.id, emoji: cat.emoji };
-  state.started = true;
-  state.lastPlayDate = new Date().toLocaleDateString();
-  saveState();
-  showScreen('game');
-  renderGame();
-}
-
-// ===== SCREENS =====
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
 
 // ===== RENDER =====
-function renderGame() {
-  checkNewDay();
-  const catInfo = ALL_CATS.find(c => c.id === state.activeCat) || BASIC_CATS[0];
-  
-  document.getElementById('displayName').textContent = state.cat.name;
-  document.getElementById('displayLevel').textContent = `Lv.${state.level}`;
-  
-  document.getElementById('statFood').textContent = state.food;
-  document.getElementById('statWater').textContent = state.water;
-  document.getElementById('statTreat').textContent = state.treats;
-  document.getElementById('statBath').textContent = state.baths;
-  
-  document.getElementById('feedCount').textContent = `×${state.food}`;
-  document.getElementById('waterCount').textContent = `×${state.water}`;
-  document.getElementById('treatCount').textContent = `×${state.treats}`;
-  document.getElementById('bathCount').textContent = `×${state.baths}`;
-  
-  document.getElementById('growthBar').style.width = `${state.growth}%`;
-  document.getElementById('growthText').textContent = `成长值: ${state.growth}/100`;
-  
-  // Cat display with stage
-  const catEl = document.getElementById('catDisplay');
-  catEl.textContent = catInfo.emoji;
-  catEl.className = 'cat-display';
-  if (state.level >= 7) catEl.classList.add('stage-3');
-  else if (state.level >= 4) catEl.classList.add('stage-2');
-  else catEl.classList.add('stage-1');
-  
-  // Crown
-  const stage = document.getElementById('catStage');
-  let crown = stage.querySelector('.crown');
-  if (state.level >= 10) {
-    if (!crown) {
-      crown = document.createElement('div');
-      crown.className = 'crown';
-      crown.textContent = '👑';
-      stage.appendChild(crown);
-    }
-  } else if (crown) {
-    crown.remove();
-  }
-  
-  // Random mood
+function render(){
+  checkDay();
+  const catInfo=ALL_CATS.find(c=>c.id===S.activeCat)||BASIC_CATS[0];
+  document.getElementById('displayName').textContent=S.cat.name;
+  document.getElementById('displayLevel').textContent=`Lv.${S.level}`;
+  document.getElementById('statFood').textContent=S.food;
+  document.getElementById('statWater').textContent=S.water;
+  document.getElementById('statTreat').textContent=S.treats;
+  document.getElementById('statBath').textContent=S.baths;
+  document.getElementById('feedCount').textContent=`×${S.food}`;
+  document.getElementById('waterCount').textContent=`×${S.water}`;
+  document.getElementById('treatCount').textContent=`×${S.treats}`;
+  document.getElementById('bathCount').textContent=`×${S.baths}`;
+  document.getElementById('growthBar').style.width=`${S.growth}%`;
+  document.getElementById('growthText').textContent=`成长值: ${S.growth}/100`;
+
+  const stage=S.level>=7?3:S.level>=4?2:1;
+  const crowned=S.level>=10;
+  document.getElementById('catStage').innerHTML=makeCatHTML(catInfo.theme,stage,crowned);
   updateMood();
 }
 
-function updateMood() {
-  let pool = MOODS.idle;
-  if (state.food === 0) pool = MOODS.hungry;
-  else if (state.water === 0) pool = MOODS.thirsty;
-  else if (state.baths === 0 && state.level > 2) pool = MOODS.dirty;
-  else pool = MOODS.happy;
-  const msg = pool[Math.floor(Math.random() * pool.length)];
-  document.getElementById('moodBubble').textContent = msg;
+function updateMood(){
+  let p=MOODS.idle;
+  if(S.food===0)p=MOODS.hungry;
+  else if(S.water===0)p=MOODS.thirsty;
+  else if(S.baths===0&&S.level>2)p=MOODS.dirty;
+  else p=MOODS.happy;
+  document.getElementById('moodBubble').textContent=p[Math.floor(Math.random()*p.length)];
 }
 
-// ===== ACTIONS =====
-function bounceCat() {
-  const el = document.getElementById('catDisplay');
-  el.classList.remove('bounce');
-  void el.offsetWidth;
-  el.classList.add('bounce');
+function bounceCat(){const el=document.getElementById('catDisplay');if(el){el.classList.remove('bounce');void el.offsetWidth;el.classList.add('bounce')}
+  const c=document.querySelector('#catStage .css-cat');if(c){c.classList.remove('bounce');void c.offsetWidth;c.classList.add('bounce')}
 }
 
-function addGrowth(n) {
-  state.growth += n;
-  while (state.growth >= 100 && state.level < 10) {
-    state.growth -= 100;
-    state.level++;
-    toast(`🎉 恭喜！${state.cat.name} 升到 Lv.${state.level} 了！`);
-  }
-  if (state.level >= 10) state.growth = Math.min(state.growth, 100);
-  saveState();
-  renderGame();
+function addGrowth(n){
+  S.growth+=n;
+  while(S.growth>=100&&S.level<10){S.growth-=100;S.level++;toast(`🎉 ${S.cat.name} 升到 Lv.${S.level}！`)}
+  if(S.level>=10)S.growth=Math.min(S.growth,100);
+  save();render();
 }
 
-function doFeed() {
-  if (state.food <= 0) { toast('没有猫粮了，去做任务获取吧~'); return; }
-  state.food--;
-  bounceCat();
-  toast(`${state.cat.name} 吃得好开心！成长+1`);
-  document.getElementById('moodBubble').textContent = MOODS.fed[Math.floor(Math.random()*MOODS.fed.length)];
-  addGrowth(1);
-}
-
-function doWater() {
-  if (state.water <= 0) { toast('没有水了，去做任务获取吧~'); return; }
-  state.water--;
-  bounceCat();
-  toast(`${state.cat.name} 咕噜咕噜喝水~ 成长+1`);
-  addGrowth(1);
-}
-
-function doTreat() {
-  if (state.treats <= 0) { toast('没有猫条了，去做任务获取吧~'); return; }
-  state.treats--;
-  bounceCat();
-  toast(`${state.cat.name} 超爱猫条！成长+5 🎉`);
-  document.getElementById('moodBubble').textContent = '太好吃了！！！😻';
-  addGrowth(5);
-}
-
-function doBath() {
-  if (state.baths <= 0) { toast('没有洗澡次数了，签到获取吧~'); return; }
-  state.baths--;
-  bounceCat();
-  toast(`${state.cat.name} 洗得干干净净！✨ 成长+1`);
-  document.getElementById('moodBubble').textContent = MOODS.bathed[Math.floor(Math.random()*MOODS.bathed.length)];
-  addGrowth(1);
-}
+function doFeed(){if(S.food<=0){toast('没有猫粮了，去做任务获取~');return}S.food--;bounceCat();toast('吃得真香！成长+1 🐟');addGrowth(1)}
+function doWater(){if(S.water<=0){toast('没有水了，去做任务获取~');return}S.water--;bounceCat();toast('咕噜咕噜~ 成长+1 💧');addGrowth(1)}
+function doTreat(){if(S.treats<=0){toast('没有猫条了，去做任务获取~');return}S.treats--;bounceCat();toast('超爱猫条！成长+5 🧶');addGrowth(5)}
+function doBath(){if(S.baths<=0){toast('没有洗澡次数了~');return}S.baths--;bounceCat();toast('香喷喷！✨ 成长+1');addGrowth(1)}
 
 // ===== MODALS =====
-function openModal(id) {
-  document.getElementById(id).classList.add('active');
-  if (id === 'dailyModal') renderDailyTasks();
-  if (id === 'collectionModal') renderCollection();
-}
-function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+function openModal(id){document.getElementById(id).classList.add('active');if(id==='dailyModal')renderDaily();if(id==='collectionModal')renderColl();if(id==='towerModal')renderTower()}
+function closeModal(id){document.getElementById(id).classList.remove('active')}
 
-// ===== DAILY TASKS =====
-function renderDailyTasks() {
-  const d = state.daily;
-  const tasks = [
-    { name: '每日签到', desc: '领取1次洗澡', reward: '🛁 ×1', done: d.checkin, action: doCheckIn },
-    { name: '算24点 ×5', desc: '获取1份猫粮', reward: '🐟 ×1', done: d.quiz24 >= 5, progress: `${d.quiz24}/5`, action: () => { closeModal('dailyModal'); startQuiz24(); } },
-    { name: '10以内乘法 ×10', desc: '获取1份水', reward: '💧 ×1', done: d.quizMul10 >= 10, progress: `${d.quizMul10}/10`, action: () => { closeModal('dailyModal'); startMulQuiz(10); } },
-    { name: '19以内2位数乘法 ×10', desc: '获取1份猫条', reward: '🧶 ×1', done: d.quizMul19 >= 10, progress: `${d.quizMul19}/10`, action: () => { closeModal('dailyModal'); startMulQuiz(19); } },
+// ===== DAILY =====
+function renderDaily(){
+  const d=S.daily;
+  const tasks=[
+    {name:'每日签到',desc:'领取1次洗澡',reward:'🛁 ×1',done:d.checkin,fn:doCheckIn},
+    {name:'算24点',desc:'完成5题获取猫粮',reward:'🐟 ×1',done:d.quiz24>=5,prog:`${d.quiz24}/5`,fn:()=>{closeModal('dailyModal');startQuiz24()}},
+    {name:'10以内乘法',desc:'答对10题获取水',reward:'💧 ×1',done:d.quizMul10>=10,prog:`${d.quizMul10}/10`,fn:()=>{closeModal('dailyModal');startMul(10)}},
+    {name:'19以内乘法',desc:'答对10题获取猫条',reward:'🧶 ×1',done:d.quizMul19>=10,prog:`${d.quizMul19}/10`,fn:()=>{closeModal('dailyModal');startMul(19)}},
   ];
-  
-  document.getElementById('dailyTasksList').innerHTML = tasks.map(t => `
+  document.getElementById('dailyTasksList').innerHTML=tasks.map(t=>`
     <div class="task-item ${t.done?'done':''}">
-      <div>
-        <div style="font-weight:600">${t.name} ${t.progress?`(${t.progress})`:''}</div>
-        <div style="font-size:0.85em;color:#888">${t.desc}</div>
-      </div>
-      <div style="text-align:right">
-        <div class="task-reward">${t.reward}</div>
-        ${t.done ? '<span style="color:var(--success)">✅</span>' : `<button class="btn btn-primary btn-sm" onclick="(${t.action.toString()})()">去完成</button>`}
-      </div>
-    </div>
-  `).join('');
+      <div class="task-left"><div class="task-name">${t.name} ${t.prog?`(${t.prog})`:''}</div><div class="task-desc">${t.desc}</div></div>
+      <div><div class="task-reward">${t.reward}</div>${t.done?'<span style="color:var(--success)">✅</span>':`<button class="btn btn-primary btn-sm" id="dtask_${t.name}">去完成</button>`}</div>
+    </div>`).join('');
+  // Bind buttons
+  tasks.forEach(t=>{if(!t.done){const b=document.getElementById('dtask_'+t.name);if(b)b.onclick=t.fn}});
 }
-
-function doCheckIn() {
-  if (state.daily.checkin) { toast('今天已经签到过了~'); return; }
-  state.daily.checkin = true;
-  state.baths++;
-  saveState();
-  toast('签到成功！获得1次洗澡 🛁');
-  renderDailyTasks();
-  renderGame();
-}
+function doCheckIn(){if(S.daily.checkin){toast('今天已签到~');return}S.daily.checkin=true;S.baths++;save();toast('签到成功！+1次洗澡 🛁');renderDaily();render()}
 
 // ===== MULTIPLICATION QUIZ =====
-let mulQuizState = { questions: [], current: 0, correct: 0, mode: 10 };
-
-function startMulQuiz(mode) {
-  mulQuizState = { questions: [], current: 0, correct: 0, mode };
-  const count = 10;
-  for (let i = 0; i < count; i++) {
-    let a, b;
-    if (mode === 10) {
-      a = Math.floor(Math.random() * 9) + 2;
-      b = Math.floor(Math.random() * 9) + 2;
-    } else {
-      a = Math.floor(Math.random() * 18) + 2;
-      b = Math.floor(Math.random() * 18) + 2;
-    }
-    const answer = a * b;
-    const options = generateOptions(answer, 4);
-    mulQuizState.questions.push({ a, b, answer, options });
+let MQ={qs:[],cur:0,ok:0,mode:10};
+function startMul(mode){
+  MQ={qs:[],cur:0,ok:0,mode};
+  for(let i=0;i<10;i++){
+    let a,b;
+    if(mode===10){a=r(2,9);b=r(2,9)}else{a=r(2,18);b=r(2,18)}
+    const ans=a*b;MQ.push({a,b,ans,opts:genOpts(ans,4)});
   }
-  document.getElementById('quizTitle').textContent = mode === 10 ? '10以内乘法' : '19以内乘法';
-  showMulQuestion();
-  openModal('quizModal');
+  document.getElementById('quizTitle').textContent=mode===10?'10以内乘法':'19以内乘法';
+  showMulQ();openModal('quizModal');
 }
+MQ.push=function(q){this.qs.push(q)};
+function genOpts(c,n){const s=new Set([c]);while(s.size<n){let v=c+r(-8,8);if(v>0&&v!==c)s.add(v)}return shuf([...s])}
+function r(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuf(a){for(let i=a.length-1;i>0;i--){const j=r(0,i);[a[i],a[j]]=[a[j],a[i]]}return a}
 
-function generateOptions(correct, count) {
-  const opts = new Set([correct]);
-  while (opts.size < count) {
-    let v = correct + Math.floor(Math.random() * 20) - 10;
-    if (v > 0 && v !== correct) opts.add(v);
-  }
-  return shuffle([...opts]);
+function showMulQ(){
+  const q=MQ.qs[MQ.cur];
+  document.getElementById('quizProgress').textContent=`${MQ.cur+1}/${MQ.qs.length}`;
+  document.getElementById('quizQuestion').textContent=`${q.a} × ${q.b} = ?`;
+  document.getElementById('quizOptions').innerHTML=q.opts.map(o=>`<button class="quiz-opt" onclick="chkMul(this,${o})">${o}</button>`).join('');
 }
-
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
+function chkMul(el,v){
+  const q=MQ.qs[MQ.cur];document.querySelectorAll('#quizOptions .quiz-opt').forEach(b=>b.disabled=true);
+  if(v===q.ans){el.classList.add('correct');MQ.ok++}else{el.classList.add('wrong');document.querySelectorAll('#quizOptions .quiz-opt').forEach(b=>{if(+b.textContent===q.ans)b.classList.add('correct')})}
+  setTimeout(()=>{MQ.cur++;MQ.cur<MQ.qs.length?showMulQ():finMul()},700);
 }
-
-function showMulQuestion() {
-  const q = mulQuizState.questions[mulQuizState.current];
-  document.getElementById('quizProgress').textContent = `${mulQuizState.current + 1}/${mulQuizState.questions.length}`;
-  document.getElementById('quizQuestion').textContent = `${q.a} × ${q.b} = ?`;
-  document.getElementById('quizOptions').innerHTML = q.options.map(o =>
-    `<button class="quiz-opt" onclick="checkMulAnswer(this,${o})">${o}</button>
-  `).join('');
+function finMul(){
+  closeQuizModal();
+  const {mode,ok}=MQ;
+  if(mode===10){S.daily.quizMul10+=ok;if(S.daily.quizMul10>=10&&S.daily.quizMul10-ok<10){S.water++;toast(`答对${ok}题！获得水 💧`)}else toast(`答对${ok}题！还需${Math.max(0,10-S.daily.quizMul10)}题`)}
+  else{S.daily.quizMul19+=ok;if(S.daily.quizMul19>=10&&S.daily.quizMul19-ok<10){S.treats++;toast(`答对${ok}题！获得猫条 🧶`)}else toast(`答对${ok}题！还需${Math.max(0,10-S.daily.quizMul19)}题`)}
+  save();render();
 }
-
-function checkMulAnswer(el, val) {
-  const q = mulQuizState.questions[mulQuizState.current];
-  const opts = document.querySelectorAll('#quizOptions .quiz-opt');
-  opts.forEach(o => o.disabled = true);
-  
-  if (val === q.answer) {
-    el.classList.add('correct');
-    mulQuizState.correct++;
-  } else {
-    el.classList.add('wrong');
-    opts.forEach(o => {
-      if (parseInt(o.textContent) === q.answer) o.classList.add('correct');
-    });
-  }
-  
-  setTimeout(() => {
-    mulQuizState.current++;
-    if (mulQuizState.current < mulQuizState.questions.length) {
-      showMulQuestion();
-    } else {
-      finishMulQuiz();
-    }
-  }, 800);
-}
-
-function finishMulQuiz() {
-  closeModal('quizModal');
-  const { mode, correct } = mulQuizState;
-  if (mode === 10) {
-    state.daily.quizMul10 += correct;
-    if (state.daily.quizMul10 >= 10 && state.daily.quizMul10 - correct < 10) {
-      state.water++;
-      toast(`完成任务！获得1份水 💧 (答对${correct}题)`);
-    } else {
-      toast(`答对${correct}题！还需${Math.max(0, 10 - state.daily.quizMul10)}题完成任务`);
-    }
-  } else {
-    state.daily.quizMul19 += correct;
-    if (state.daily.quizMul19 >= 10 && state.daily.quizMul19 - correct < 10) {
-      state.treats++;
-      toast(`完成任务！获得1份猫条 🧶 (答对${correct}题)`);
-    } else {
-      toast(`答对${correct}题！还需${Math.max(0, 10 - state.daily.quizMul19)}题完成任务`);
-    }
-  }
-  saveState();
-  renderGame();
-}
+function closeQuizModal(){closeModal('quizModal')}
 
 // ===== 24 POINT =====
-let p24State = { sets: [], current: 0, solved: 0 };
+const SOLVABLE24=[[1,2,3,8],[1,2,4,6],[1,3,4,5],[2,3,4,5],[2,3,4,6],[3,3,4,6],[1,2,5,8],[1,2,6,8],[1,3,4,8],[1,4,5,6],[2,2,3,8],[2,3,3,6],[2,4,4,7],[3,3,3,8],[3,3,5,5],[4,4,4,4],[1,2,3,4],[1,2,3,6],[1,2,4,8],[2,2,2,9],[2,2,4,8],[2,3,3,8],[2,3,6,6],[2,4,4,6],[3,3,4,4],[3,4,4,5],[1,1,4,6],[1,3,6,6],[6,6,6,6],[5,5,5,1],[2,2,6,6],[8,8,8,3],[9,9,9,5],[1,5,5,5],[2,2,2,6],[3,4,6,6],[1,1,3,8],[1,2,2,8],[2,3,3,4],[3,5,5,9],[1,4,6,7]];
 
-function generate24Set() {
-  // Generate 4 numbers that can make 24
-  const templates = [
-    () => { const a=r2(2,9),b=r2(2,9),c=r2(2,9); return {cards:[a,b,c,24/(a*b/c>0?a*b/c:1)].map(Math.round).filter(v=>v>0&&v<50),sol:''}; },
-  ];
-  // Simple approach: pick known solvable sets
-  const solvable = [
-    [1,2,3,8],[1,2,4,6],[1,2,5,8],[1,2,6,8],[1,3,4,5],[1,3,4,8],[1,3,5,7],
-    [1,4,5,6],[2,2,3,8],[2,3,3,6],[2,3,4,5],[2,3,4,6],[2,3,5,5],[2,4,4,7],
-    [3,3,3,8],[3,3,4,6],[3,3,5,5],[4,4,4,4],[1,1,4,6],[1,2,3,4],[1,2,3,6],
-    [1,2,4,8],[1,3,6,6],[2,2,2,9],[2,2,4,8],[2,3,3,8],[2,3,6,6],[2,4,4,6],
-    [3,3,4,4],[3,4,4,5],[5,5,5,1],[6,6,6,6],[8,8,8,3],[9,9,9,5],
-    [1,1,5,5],[2,2,6,6],[3,3,3,3],[4,4,8,8],[1,5,5,5],[2,2,2,6],
-    [3,4,6,6],[1,1,3,8],[1,2,2,8],[2,3,3,4],[3,5,5,9],[1,4,6,7],
-  ];
-  return solvable[Math.floor(Math.random()*solvable.length)];
+let P24={sets:[],cur:0,ok:0,usedNums:[],expr:[]};
+function startQuiz24(){
+  if(S.daily.quiz24>=5){toast('今天24点已完成~');return}
+  P24={sets:[],cur:0,ok:0,usedNums:[],expr:[]};
+  for(let i=0;i<5;i++)P24.sets.push(shuf([...SOLVABLE24[r(0,SOLVABLE24.length-1)]]).sort(()=>Math.random()-.5));
+  show24Q();openModal('quiz24Modal');
 }
 
-function r2(min,max) { return Math.floor(Math.random()*(max-min+1))+min; }
-
-function startQuiz24() {
-  if (state.daily.quiz24 >= 5) { toast('今天的24点任务已完成~'); return; }
-  p24State = { sets: [], current: 0, solved: 0 };
-  for (let i = 0; i < 5; i++) p24State.sets.push(generate24Set());
-  show24Question();
-  openModal('quiz24Modal');
+function show24Q(){
+  const cards=P24.sets[P24.cur];
+  document.getElementById('p24Progress').textContent=`${P24.cur+1}/5 · 已答对${P24.ok}`;
+  document.getElementById('p24Cards').innerHTML=cards.map((c,i)=>`<div class="p24-card" id="p24c${i}" onclick="pick24Num(${i})">${c}</div>`).join('');
+  P24.usedNums=[];P24.expr=[];
+  render24Display();
+  build24Keypad(cards);
+  document.getElementById('p24Result').textContent='';
 }
 
-function show24Question() {
-  const cards = p24State.sets[p24State.current];
-  document.getElementById('p24Progress').textContent = `${p24State.current+1}/5`;
-  document.getElementById('p24Cards').innerHTML = cards.map(c =>
-    `<div class="point24-card">${c}</div>`
-  ).join('');
-  document.getElementById('p24Input').value = '';
-  document.getElementById('p24Result').textContent = '';
+function build24Keypad(cards){
+  const ops=['+','−','×','÷','(',')'];
+  let html='';
+  // Row: numbers
+  html+=cards.map((c,i)=>`<button class="p24-key" id="p24k${i}" onclick="pick24Num(${i})">${c}</button>`).join('');
+  // Row: operators
+  html+=ops.map(o=>`<button class="p24-key op" onclick="pick24Op('${o}')">${o}</button>`).join('');
+  // Row: del, clear, submit
+  html+=`<button class="p24-key del" onclick="del24()">⌫</button>`;
+  html+=`<button class="p24-key action" onclick="clear24()">清空</button>`;
+  html+=`<button class="p24-key op" style="grid-column:span 3" onclick="submit24()">= 24 ?</button>`;
+  document.getElementById('p24Keypad').innerHTML=html;
 }
 
-function submit24() {
-  const input = document.getElementById('p24Input').value.trim();
-  if (!input) return;
-  // Validate: must use exactly the 4 numbers
-  const cards = p24State.sets[p24State.current].map(String);
-  try {
-    // Replace Chinese operators
-    let expr = input.replace(/×/g,'*').replace(/÷/g,'/').replace(/（/g,'(').replace(/）/g,')');
-    // Check: eval the expression
-    const result = Function('"use strict"; return (' + expr + ')')();
-    // Check used numbers
-    const nums = expr.replace(/[+\-*/()]/g, ' ').split(/\s+/).filter(Boolean);
-    const cardCopy = [...cards];
-    let valid = true;
-    for (const n of nums) {
-      const idx = cardCopy.indexOf(n);
-      if (idx === -1) { valid = false; break; }
-      cardCopy.splice(idx, 1);
-    }
-    if (Math.abs(result - 24) < 0.001 && valid) {
-      document.getElementById('p24Result').textContent = '✅ 正确！';
-      document.getElementById('p24Result').style.color = 'var(--success)';
-      p24State.solved++;
-      state.daily.quiz24++;
-      if (state.daily.quiz24 === 5) {
-        state.food++;
-        toast('完成5道24点！获得猫粮 🐟');
-      }
-      saveState(); renderGame();
-      setTimeout(() => { p24State.current++; next24orFinish(); }, 800);
-    } else {
-      document.getElementById('p24Result').textContent = `❌ 结果=${result}，再试试~`;
-      document.getElementById('p24Result').style.color = 'var(--danger)';
-    }
-  } catch(e) {
-    document.getElementById('p24Result').textContent = '⚠️ 表达式有误，请检查';
-    document.getElementById('p24Result').style.color = 'var(--danger)';
+function pick24Num(idx){
+  if(P24.usedNums.includes(idx))return;
+  P24.usedNums.push(idx);
+  P24.expr.push({type:'num',val:P24.sets[P24.cur][idx],idx});
+  document.getElementById('p24c'+idx).style.opacity='.3';
+  document.getElementById('p24k'+idx).style.opacity='.3';
+  render24Display();
+}
+function pick24Op(op){
+  P24.expr.push({type:'op',val:op});
+  render24Display();
+}
+function del24(){
+  if(!P24.expr.length)return;
+  const last=P24.expr.pop();
+  if(last.type==='num'){
+    const i=P24.usedNums.indexOf(last.idx);
+    if(i>-1)P24.usedNums.splice(i,1);
+    const el=document.getElementById('p24c'+last.idx);if(el)el.style.opacity='1';
+    const k=document.getElementById('p24k'+last.idx);if(k)k.style.opacity='1';
   }
+  render24Display();
 }
-
-function skip24() {
-  state.daily.quiz24++;
-  if (state.daily.quiz24 === 5) {
-    state.food++;
-    toast('完成5道24点！获得猫粮 🐟');
-  }
-  saveState(); renderGame();
-  p24State.current++;
-  next24orFinish();
+function clear24(){
+  P24.expr=[];P24.usedNums=[];
+  document.querySelectorAll('.p24-card').forEach(e=>e.style.opacity='1');
+  document.querySelectorAll('.p24-key').forEach(e=>e.style.opacity='1');
+  render24Display();
+  document.getElementById('p24Result').textContent='';
 }
-
-function next24orFinish() {
-  if (p24State.current < 5) {
-    show24Question();
-  } else {
-    closeModal('quiz24Modal');
-    toast(`24点结束！答对${p24State.solved}/5`);
-  }
-}
-
-// ===== TOWER =====
-function startTower() {
-  const floor = state.towerCurrent + 1;
-  const towerState = { questions: [], current: 0, correct: 0, floor };
-  
-  for (let i = 0; i < 20; i++) {
-    // Difficulty scales with floor
-    const maxN = Math.min(19, Math.floor(3 + floor * 0.16 + Math.random() * 3));
-    const a = Math.floor(Math.random() * (maxN - 1)) + 2;
-    const b = Math.floor(Math.random() * (maxN - 1)) + 2;
-    const answer = a * b;
-    const options = generateOptions(answer, 4);
-    towerState.questions.push({ a, b, answer, options });
-  }
-  
-  document.getElementById('towerMain').style.display = 'none';
-  document.getElementById('towerQuiz').style.display = 'block';
-  
-  window._towerState = towerState;
-  showTowerQuestion();
-}
-
-function showTowerQuestion() {
-  const ts = window._towerState;
-  const q = ts.questions[ts.current];
-  document.getElementById('towerProgress').textContent = `第${ts.floor}层 · ${ts.current+1}/20`;
-  document.getElementById('towerBar').style.width = `${(ts.current/20)*100}%`;
-  document.getElementById('towerQuestion').textContent = `${q.a} × ${q.b} = ?`;
-  document.getElementById('towerOptions').innerHTML = q.options.map(o =>
-    `<button class="quiz-opt" onclick="checkTowerAnswer(this,${o})">${o}</button>`
-  ).join('');
-}
-
-function checkTowerAnswer(el, val) {
-  const ts = window._towerState;
-  const q = ts.questions[ts.current];
-  const opts = document.querySelectorAll('#towerOptions .quiz-opt');
-  opts.forEach(o => o.disabled = true);
-  
-  if (val === q.answer) {
-    el.classList.add('correct');
-    ts.correct++;
-  } else {
-    el.classList.add('wrong');
-    opts.forEach(o => { if (parseInt(o.textContent) === q.answer) o.classList.add('correct'); });
-  }
-  
-  setTimeout(() => {
-    ts.current++;
-    if (ts.current < 20) {
-      showTowerQuestion();
-    } else {
-      finishTower();
-    }
-  }, 600);
-}
-
-function finishTower() {
-  const ts = window._towerState;
-  const passed = ts.correct >= 15;
-  
-  document.getElementById('towerQuiz').style.display = 'none';
-  document.getElementById('towerMain').style.display = 'block';
-  
-  if (passed) {
-    state.towerCurrent = ts.floor;
-    if (ts.floor > state.towerBest) state.towerBest = ts.floor;
-    
-    // Check unlocks
-    const unlock = TOWER_CATS.find(c => c.floor === Math.floor(ts.floor / 10) * 10);
-    if (unlock && !state.unlockedCats.includes(unlock.id)) {
-      state.unlockedCats.push(unlock.id);
-      toast(`🎉 解锁新品种：${unlock.breed}！`);
-    }
-    
-    toast(`通关！答对${ts.correct}/20 🎉 进入第${ts.floor+1}层`);
-  } else {
-    state.towerCurrent = 0;
-    toast(`挑战失败！答对${ts.correct}/20，需要15题 😢 从头再来`);
-  }
-  
-  document.getElementById('towerFloor').textContent = `第 ${state.towerCurrent + 1} 层`;
-  document.getElementById('towerInfo').textContent = `最高纪录: 第 ${state.towerBest} 层`;
-  saveState(); renderGame();
-}
-
-// ===== COLLECTION =====
-function renderCollection() {
-  document.getElementById('collectionGrid').innerHTML = ALL_CATS.map(c => {
-    const unlocked = state.unlockedCats.includes(c.id);
-    const active = state.activeCat === c.id;
-    return `
-      <div class="collection-item ${active?'active':''} ${unlocked?'':'locked'}"
-           onclick="${unlocked?`selectActiveCat('${c.id}')`:''}">
-        <div class="cat-emoji">${c.emoji}</div>
-        <div class="cat-breed">${unlocked ? c.breed : '🔒 未解锁'}</div>
-      </div>
-    `;
+function render24Display(){
+  const d=document.getElementById('p24Display');
+  if(!P24.expr.length){d.textContent='点击数字和运算符组成24';return}
+  d.innerHTML=P24.expr.map(t=>{
+    if(t.type==='num')return `<span class="token num-token">${t.val}</span>`;
+    return `<span class="token op-token">${t.val}</span>`;
   }).join('');
 }
 
-function selectActiveCat(id) {
-  state.activeCat = id;
-  saveState();
-  renderCollection();
-  renderGame();
-  toast('切换猫咪形象成功！');
+function submit24(){
+  if(!P24.expr.length)return;
+  let expr='';
+  const cards=P24.sets[P24.cur].map(String);
+  const usedCards=[];
+  for(const t of P24.expr){
+    if(t.type==='num'){expr+=t.val;usedCards.push(String(t.val))}
+    else{expr+=t.val.replace('−','-').replace('×','*').replace('÷','/')}
+  }
+  // Check all 4 numbers used
+  const cc=[...cards];let ok=true;
+  for(const n of usedCards){const i=cc.indexOf(n);if(i===-1){ok=false;break}cc.splice(i,1)}
+  if(!ok){document.getElementById('p24Result').innerHTML='<span style="color:var(--danger)">❌ 请使用全部4张牌</span>';return}
+  try{
+    const res=Function('"use strict";return('+expr+')')();
+    if(Math.abs(res-24)<0.01){
+      document.getElementById('p24Result').innerHTML='<span style="color:var(--success)">✅ 正确！太棒了！</span>';
+      P24.ok++;S.daily.quiz24++;
+      if(S.daily.quiz24===5){S.food++;toast('完成5道24点！获得猫粮 🐟')}
+      save();render();
+      setTimeout(()=>{P24.cur++;P24.cur<5?show24Q():(closeModal('quiz24Modal'),toast(`24点结束！答对${P24.ok}/5`))},1000);
+    }else{
+      document.getElementById('p24Result').innerHTML=`<span style="color:var(--danger)">❌ = ${Number.isInteger(res)?res:res.toFixed(2)}，不是24哦</span>`;
+    }
+  }catch(e){document.getElementById('p24Result').innerHTML='<span style="color:var(--danger)">⚠️ 表达式不完整</span>'}
+}
+
+// ===== TOWER =====
+function renderTower(){
+  document.getElementById('towerFloor').textContent=`第 ${S.towerCurrent+1} 层`;
+  document.getElementById('towerBest').textContent=`最高纪录: 第 ${S.towerBest} 层`;
+}
+
+function startTower(){
+  const floor=S.towerCurrent+1;
+  const ts={qs:[],cur:0,ok:0,floor};
+  for(let i=0;i<20;i++){
+    const maxN=Math.min(19,Math.floor(3+floor*0.16+Math.random()*3));
+    const a=r(2,maxN),b=r(2,maxN),ans=a*b;
+    ts.qs.push({a,b,ans,opts:genOpts(ans,4)});
+  }
+  window._ts=ts;
+  document.getElementById('towerMain').style.display='none';
+  document.getElementById('towerQuiz').style.display='block';
+  showTowerQ();
+}
+function showTowerQ(){
+  const ts=window._ts,q=ts.qs[ts.cur];
+  document.getElementById('towerQProgress').textContent=`第${ts.floor}层 · ${ts.cur+1}/20`;
+  document.getElementById('towerBar').style.width=`${(ts.cur/20)*100}%`;
+  document.getElementById('towerQuestion').textContent=`${q.a} × ${q.b} = ?`;
+  document.getElementById('towerOptions').innerHTML=q.opts.map(o=>`<button class="quiz-opt" onclick="chkTower(this,${o})">${o}</button>`).join('');
+}
+function chkTower(el,v){
+  const ts=window._ts,q=ts.qs[ts.cur];
+  document.querySelectorAll('#towerOptions .quiz-opt').forEach(b=>b.disabled=true);
+  if(v===q.ans){el.classList.add('correct');ts.ok++}else{el.classList.add('wrong');document.querySelectorAll('#towerOptions .quiz-opt').forEach(b=>{if(+b.textContent===q.ans)b.classList.add('correct')})}
+  setTimeout(()=>{ts.cur++;ts.cur<20?showTowerQ():finTower()},500);
+}
+function finTower(){
+  const ts=window._ts,passed=ts.ok>=15;
+  document.getElementById('towerQuiz').style.display='none';
+  document.getElementById('towerMain').style.display='block';
+  if(passed){
+    S.towerCurrent=ts.floor;if(ts.floor>S.towerBest)S.towerBest=ts.floor;
+    const unlockFloor=Math.floor(ts.floor/10)*10;
+    const unlock=TOWER_CATS.find(c=>c.floor===unlockFloor);
+    if(unlock&&!S.unlocked.includes(unlock.id)){S.unlocked.push(unlock.id);toast(`🎉 解锁新品种：${unlock.breed}！`)}
+    toast(`通关！答对${ts.ok}/20 🎉`);
+  }else{S.towerCurrent=0;toast(`挑战失败！答对${ts.ok}/20，需要15题 😢`)}
+  save();render();renderTower();
+}
+function closeTowerModal(){
+  document.getElementById('towerQuiz').style.display='none';
+  document.getElementById('towerMain').style.display='block';
+  closeModal('towerModal');
+}
+
+// ===== COLLECTION =====
+function renderColl(){
+  document.getElementById('collectionGrid').innerHTML=ALL_CATS.map(c=>{
+    const unlocked=S.unlocked.includes(c.id);
+    const active=S.activeCat===c.id;
+    return `<div class="collection-item ${active?'active':''} ${unlocked?'':'locked'}" onclick="showCatDetail('${c.id}')">
+      ${makeMiniCat(c.theme)}
+      <div class="breed-name">${c.name}</div>
+      <div class="unlock-info">${unlocked?(active?'✅ 使用中':'点击查看'):'🔒 未解锁'}</div>
+    </div>`;
+  }).join('');
+}
+
+function showCatDetail(id){
+  const c=ALL_CATS.find(x=>x.id===id);if(!c)return;
+  const unlocked=S.unlocked.includes(id);
+  const active=S.activeCat===id;
+  const unlockText=c.floor?`爬塔第 ${c.floor} 层解锁`:unlocked?'初始猫咪':'未解锁';
+  document.getElementById('catDetail').innerHTML=`
+    ${makeCatHTML(c.theme,2,active&&S.level>=10)}
+    <div class="detail-name">${c.name}</div>
+    <div class="detail-breed">${c.breed}</div>
+    <div style="color:#888;font-size:.85em;margin:6px 0">${c.desc}</div>
+    <div class="detail-unlock">${unlockText}</div>
+    ${unlocked?`<div class="detail-actions">
+      <button class="btn ${active?'btn-ghost':'btn-primary'} btn-sm" onclick="switchCat('${id}')">${active?'当前使用中':'设为形象'}</button>
+    </div>`:''}
+  `;
+  closeModal('collectionModal');
+  openModal('catDetailModal');
+}
+
+function switchCat(id){
+  S.activeCat=id;save();render();
+  closeModal('catDetailModal');
+  const c=ALL_CATS.find(x=>x.id===id);
+  toast(`已切换为 ${c.name}！`);
 }
 
 // ===== TOAST =====
-function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 2500);
-}
+function toast(m){const e=document.getElementById('toast');e.textContent=m;e.classList.add('show');clearTimeout(window._tt);window._tt=setTimeout(()=>e.classList.remove('show'),2500)}
 
-// ===== STARTUP =====
-if (state.started) {
-  showScreen('game');
-  renderGame();
-} else {
-  initPicker();
-}
+// ===== START =====
+if(S.started){showScreen('game');render()}else initPicker();
 </script>
 </body>
 </html>
