@@ -253,6 +253,17 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 .tower-desc{color:#666;font-size:.85em;margin-bottom:16px;line-height:1.5}
 .tower-progress-bar{width:100%;height:6px;background:#eee;border-radius:3px;margin-bottom:12px;overflow:hidden}
 .tower-progress-fill{height:100%;background:linear-gradient(90deg,var(--success),var(--mint));transition:width .3s}
+.tower-timer{text-align:center;margin-bottom:10px}
+.tower-timer-ring{width:56px;height:56px;margin:0 auto 4px;position:relative}
+.tower-timer-ring svg{transform:rotate(-90deg)}
+.tower-timer-ring circle{fill:none;stroke-width:5}
+.tower-timer-ring .bg{stroke:#eee}
+.tower-timer-ring .fg{stroke:var(--success);stroke-linecap:round;transition:stroke-dashoffset .3s linear,stroke .3s}
+.tower-timer-ring .fg.warn{stroke:var(--gold)}
+.tower-timer-ring .fg.danger{stroke:var(--danger)}
+.tower-timer-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:1.1em;font-weight:800}
+.tower-timer-num.warn{color:var(--gold)}
+.tower-timer-num.danger{color:var(--danger)}
 
 /* COLLECTION */
 .collection-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
@@ -337,7 +348,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
     🔢 <span class="highlight">10以内乘法 ×10</span> → 送 1 份水<br>
     🧮 <span class="highlight">19以内乘法 ×10</span> → 送 1 份猫条
   </p></div>
-  <div class="guide-section"><h3>🗼 爬塔挑战</h3><p>19 以内乘法 20 题速算<br>由易到难共 <span class="highlight">100 层</span><br>答对 ≥15 题通关<br>每 10 层解锁一只<span class="highlight">稀有猫咪</span>🐱<br>层数越高猫咪越好看！</p></div>
+  <div class="guide-section"><h3>🗼 爬塔挑战</h3><p>19 以内乘法 20 题速算<br>每题<span class="highlight">限时倒计时</span>⏳ 层数越高时间越短<br>由易到难共 <span class="highlight">100 层</span><br>答对 ≥15 题通关<br>每 10 层解锁一只<span class="highlight">稀有猫咪</span>🐱<br>层数越高猫咪越好看！</p></div>
   <div class="guide-section"><h3>🐱 猫咪图鉴</h3><p>4 只初始猫咪 + 10 只爬塔解锁猫咪<br>点击可查看详情并<span class="highlight">切换形象</span><br>快去爬塔收集全部吧！✨</p></div>
 </div></div>
 
@@ -355,12 +366,21 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
   <div id="towerMain" class="tower-info">
     <div class="tower-floor-num" id="towerFloor">第 1 层</div>
     <div class="tower-best" id="towerBest">最高纪录: 第 1 层</div>
-    <div class="tower-desc">20道19以内乘法速算<br>答对 ≥15 题通关 · 每10层解锁新品种猫咪</div>
+    <div class="tower-desc">20道19以内乘法速算 · 每题限时⏳<br>层数越高时间越短 · 答对 ≥15 题通关<br>每10层解锁新品种猫咪</div>
     <button class="btn btn-gold" onclick="startTower()">开始挑战 ⚔️</button>
   </div>
   <div id="towerQuiz" style="display:none">
     <div class="quiz-progress" id="towerQProgress">1/20</div>
     <div class="tower-progress-bar"><div class="tower-progress-fill" id="towerBar" style="width:0%"></div></div>
+    <div class="tower-timer">
+      <div class="tower-timer-ring">
+        <svg width="56" height="56" viewBox="0 0 56 56">
+          <circle class="bg" cx="28" cy="28" r="24"/>
+          <circle class="fg" id="timerCircle" cx="28" cy="28" r="24" stroke-dasharray="150.8" stroke-dashoffset="0"/>
+        </svg>
+        <div class="tower-timer-num" id="timerNum">10</div>
+      </div>
+    </div>
     <div class="quiz-question" id="towerQuestion"></div>
     <div class="quiz-options" id="towerOptions"></div>
   </div>
@@ -627,12 +647,17 @@ function submit24(){
 }
 
 // ===== TOWER =====
+const CIRC=150.8; // 2*PI*24
+let towerTimer=null,towerTimeLeft=0,towerMaxTime=10;
+
 function renderTower(){
   document.getElementById('towerFloor').textContent=`第 ${S.towerCurrent+1} 层`;
   document.getElementById('towerBest').textContent=`最高纪录: 第 ${S.towerBest} 层`;
 }
 function startTower(){
   const floor=S.towerCurrent+1;const ts={qs:[],cur:0,ok:0,floor};
+  // Time limit: 10s at floor 1, down to 5s at floor 100
+  towerMaxTime=Math.max(5,10-floor*0.05);
   for(let i=0;i<20;i++){
     const maxN=Math.min(19,Math.floor(3+floor*0.16+Math.random()*3));
     const a=r(2,maxN),b=r(2,maxN);
@@ -649,14 +674,48 @@ function showTowerQ(){
   document.getElementById('towerBar').style.width=`${(ts.cur/20)*100}%`;
   document.getElementById('towerQuestion').textContent=`${q.a} × ${q.b} = ?`;
   document.getElementById('towerOptions').innerHTML=q.opts.map(o=>`<button class="quiz-opt" onclick="chkTower(this,${o})">${o}</button>`).join('');
+  startTowerTimer();
+}
+function startTowerTimer(){
+  clearInterval(towerTimer);
+  towerTimeLeft=towerMaxTime;
+  updateTimerUI();
+  towerTimer=setInterval(()=>{
+    towerTimeLeft-=0.1;
+    if(towerTimeLeft<=0){towerTimeLeft=0;clearInterval(towerTimer);towerTimeout()}
+    updateTimerUI();
+  },100);
+}
+function updateTimerUI(){
+  const pct=Math.max(0,towerTimeLeft/towerMaxTime);
+  const offset=CIRC*(1-pct);
+  const circle=document.getElementById('timerCircle');
+  const num=document.getElementById('timerNum');
+  circle.style.strokeDashoffset=offset;
+  num.textContent=Math.ceil(towerTimeLeft);
+  // Color states
+  circle.classList.remove('warn','danger');
+  num.classList.remove('warn','danger');
+  if(towerTimeLeft<=3){circle.classList.add('danger');num.classList.add('danger')}
+  else if(towerTimeLeft<=5){circle.classList.add('warn');num.classList.add('warn')}
+}
+function towerTimeout(){
+  const ts=window._ts;
+  document.querySelectorAll('#towerOptions .quiz-opt').forEach(b=>b.disabled=true);
+  // Show correct answer
+  const q=ts.qs[ts.cur];
+  document.querySelectorAll('#towerOptions .quiz-opt').forEach(b=>{if(+b.textContent===q.ans)b.classList.add('correct')});
+  setTimeout(()=>{ts.cur++;ts.cur<20?showTowerQ():finTower()},800);
 }
 function chkTower(el,v){
+  clearInterval(towerTimer);
   const ts=window._ts,q=ts.qs[ts.cur];
   document.querySelectorAll('#towerOptions .quiz-opt').forEach(b=>b.disabled=true);
   if(v===q.ans){el.classList.add('correct');ts.ok++}else{el.classList.add('wrong');document.querySelectorAll('#towerOptions .quiz-opt').forEach(b=>{if(+b.textContent===q.ans)b.classList.add('correct')})}
   setTimeout(()=>{ts.cur++;ts.cur<20?showTowerQ():finTower()},500);
 }
 function finTower(){
+  clearInterval(towerTimer);
   const ts=window._ts,passed=ts.ok>=15;
   document.getElementById('towerQuiz').style.display='none';
   document.getElementById('towerMain').style.display='block';
@@ -670,6 +729,7 @@ function finTower(){
   save();render();renderTower();
 }
 function closeTowerModal(){
+  clearInterval(towerTimer);
   document.getElementById('towerQuiz').style.display='none';
   document.getElementById('towerMain').style.display='block';
   closeModal('towerModal');
