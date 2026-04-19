@@ -64,6 +64,10 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 @keyframes catBounce{0%{transform:translateY(0)}30%{transform:translateY(-15px)}50%{transform:translateY(0)}70%{transform:translateY(-8px)}100%{transform:translateY(0)}}
 .css-cat.bounce{animation:catBounce .5s ease}
 @keyframes catIdle{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes catPurr{0%,100%{transform:scale(1) rotate(0)}25%{transform:scale(1.05) rotate(-2deg)}75%{transform:scale(1.05) rotate(2deg)}}
+.css-cat.purr{animation:catPurr .4s ease}
+.float-emoji{position:absolute;font-size:20px;pointer-events:none;animation:floatUp 1.2s ease-out forwards;z-index:20}
+@keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-80px) scale(1.3)}}
 
 /* ===== BASIC CAT THEMES ===== */
 .theme-orange .cat-body,.theme-orange .cat-head{background:#f4a261}
@@ -323,7 +327,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
     <div class="growth-bar-bg"><div class="growth-bar" id="growthBar" style="width:0%"></div></div>
     <div class="growth-text" id="growthText">成长值: 0/100</div>
   </div>
-  <div class="cat-stage" id="catStage"></div>
+  <div class="cat-stage" id="catStage" onclick="petCat()"></div>
   <div class="mood-bubble" id="moodBubble">喵~ 你好呀！</div>
   <div class="action-grid">
     <button class="action-btn" onclick="doFeed()"><span class="icon">🐟</span><span class="text">喂猫粮</span><span class="count" id="feedCount">×0</span></button>
@@ -505,6 +509,32 @@ function updateMood(){
   document.getElementById('moodBubble').textContent=p[Math.floor(Math.random()*p.length)];
 }
 function bounceCat(){const c=document.querySelector('#catStage .css-cat');if(c){c.classList.remove('bounce');void c.offsetWidth;c.classList.add('bounce')}}
+
+const PET_EMOJIS=['❤️','💕','💖','✨','⭐','🌟','💗','😻','🐾','💜','🩷'];
+const PET_WORDS=['呼噜呼噜~','好舒服~','再摸摸~','喵~','嘻嘻~','喜欢！','❤️','继续~'];
+let petCount=0;
+function petCat(){
+  const stage=document.getElementById('catStage');
+  const cat=stage.querySelector('.css-cat');
+  if(!cat)return;
+  // Purr animation
+  cat.classList.remove('purr');void cat.offsetWidth;cat.classList.add('purr');
+  // Float random emoji
+  const emoji=PET_EMOJIS[Math.floor(Math.random()*PET_EMOJIS.length)];
+  const el=document.createElement('div');
+  el.className='float-emoji';
+  el.textContent=emoji;
+  el.style.left=(30+Math.random()*40)+'%';
+  el.style.top='20%';
+  stage.style.position='relative';
+  stage.appendChild(el);
+  setTimeout(()=>el.remove(),1200);
+  // Change mood text
+  petCount++;
+  if(petCount%5===0){
+    document.getElementById('moodBubble').textContent=PET_WORDS[Math.floor(Math.random()*PET_WORDS.length)];
+  }
+}
 function addGrowth(n){
   S.growth+=n;
   while(S.growth>=100&&S.level<10){S.growth-=100;S.level++;toast(`🎉 ${S.cat.name} 升到 Lv.${S.level}！`)}
