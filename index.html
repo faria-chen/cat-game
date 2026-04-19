@@ -366,7 +366,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
   <div id="towerMain" class="tower-info">
     <div class="tower-floor-num" id="towerFloor">第 1 层</div>
     <div class="tower-best" id="towerBest">最高纪录: 第 1 层</div>
-    <div class="tower-desc">20道19以内乘法速算 · 每题限时⏳<br>层数越高时间越短 · 答对 ≥15 题通关<br>每10层解锁新品种猫咪</div>
+    <div class="tower-desc">20道乘法速算 · 每题10秒⏳<br>层数越高数字越大 · 答对 ≥15 题通关<br>每10层解锁新品种猫咪</div>
     <button class="btn btn-gold" onclick="startTower()">开始挑战 ⚔️</button>
   </div>
   <div id="towerQuiz" style="display:none">
@@ -656,11 +656,15 @@ function renderTower(){
 }
 function startTower(){
   const floor=S.towerCurrent+1;const ts={qs:[],cur:0,ok:0,floor};
-  // Time limit: 10s at floor 1, down to 5s at floor 100
-  towerMaxTime=Math.max(5,10-floor*0.05);
+  towerMaxTime=10;
   for(let i=0;i<20;i++){
-    const maxN=Math.min(19,Math.floor(3+floor*0.16+Math.random()*3));
-    const a=r(2,maxN),b=r(2,maxN);
+    let a,b;
+    if(floor<=10){a=r(2,9);b=r(2,9)}
+    else if(floor<=30){a=r(2,12);b=r(2,12)}
+    else if(floor<=50){a=r(2,15);b=r(3,15)}
+    else if(floor<=70){a=r(3,18);b=r(3,18)}
+    else if(floor<=90){a=r(5,19);b=r(5,19)}
+    else{a=r(7,19);b=r(7,19)}
     ts.qs.push({a,b,ans:a*b,opts:genOpts(a*b,4)});
   }
   window._ts=ts;
