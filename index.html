@@ -330,6 +330,7 @@ body{-webkit-overflow-scrolling:touch}
 <div class="screen" id="game">
   <div class="top-bar">
     <span class="cat-name-display" id="displayName"></span>
+    <button class="rename-btn" onclick="renameCat()" title="给猫咪改名" style="background:none;border:none;cursor:pointer;font-size:15px;padding:0 2px;line-height:1;">✏️</button>
     <span class="level-badge" id="displayLevel">Lv.1</span>
   </div>
   <div class="stats-bar">
@@ -494,6 +495,15 @@ function startGame(){
   save();showScreen('game');render();
 }
 function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
+function renameCat(){
+  const cur=S.cat.name||'';
+  const n=prompt('给猫咪改个名字：',cur);
+  if(n===null)return;
+  const name=n.trim().slice(0,8);
+  if(!name){toast('名字不能为空~');return}
+  S.cat.name=name;save();render();
+  toast('改名成功！'+name+' 🐱');
+}
 
 // ===== RENDER =====
 function render(){
@@ -816,7 +826,7 @@ function finTower(){
     const unlock=TOWER_CATS.find(c=>c.floor===unlockFloor);
     if(unlock&&!S.unlocked.includes(unlock.id)){S.unlocked.push(unlock.id);toast(`🎉 解锁新品种：${unlock.breed}！`)}
     toast(`通关！答对${ts.ok}/20 🎉`);
-  }else{S.towerCurrent=0;toast(`挑战失败！答对${ts.ok}/20，需要15题 😢`)}
+  }else{toast(`挑战失败！答对${ts.ok}/20，需15题 😢 本层再来一次`)}
   save();render();renderTower();
 }
 function closeTowerModal(){
