@@ -368,7 +368,7 @@ body{-webkit-overflow-scrolling:touch}
     🔢 <span class="highlight">10以内乘法 ×10</span> → 送 1 份水<br>
     🧮 <span class="highlight">19以内乘法 ×10</span> → 送 1 份猫条
   </p></div>
-  <div class="guide-section"><h3>🗼 爬塔挑战</h3><p>19 以内乘法 20 题速算<br>每题<span class="highlight">限时20秒</span>⏳<br>由易到难共 <span class="highlight">100 层</span><br>答对 ≥15 题通关<br>每 10 层解锁一只<span class="highlight">稀有猫咪</span>🐱<br>层数越高猫咪越好看！</p></div>
+  <div class="guide-section"><h3>🗼 爬塔挑战</h3><p>19 以内乘法 20 题速算<br>每题<span class="highlight">限时20秒</span>⏳<br>由易到难共 <span class="highlight">100 层</span><br>答对 <span class="highlight">≥15 题</span> 即过关（不用做完20题）<br>错 <span class="highlight">5 题</span> 直接失败、本层重来<br>每 10 层解锁一只<span class="highlight">稀有猫咪</span>🐱<br>层数越高猫咪越好看！</p></div>
   <div class="guide-section"><h3>🐱 猫咪图鉴</h3><p>4 只初始猫咪 + 10 只爬塔解锁猫咪<br>点击可查看详情并<span class="highlight">切换形象</span><br>快去爬塔收集全部吧！✨</p></div>
 </div></div>
 
@@ -386,7 +386,7 @@ body{-webkit-overflow-scrolling:touch}
   <div id="towerMain" class="tower-info">
     <div class="tower-floor-num" id="towerFloor">第 1 层</div>
     <div class="tower-best" id="towerBest">最高纪录: 第 1 层</div>
-    <div class="tower-desc">20道乘法速算 · 每题20秒⏳<br>层数越高数字越大 · 答对 ≥15 题通关<br>每10层解锁新品种猫咪</div>
+    <div class="tower-desc">20道乘法速算 · 每题20秒⏳<br>答对 ≥15 题过关 · 错 5 题直接失败<br>层数越高数字越大 · 每10层解锁新品种猫咪</div>
     <button class="btn btn-gold" onclick="startTower()">开始挑战 ⚔️</button>
   </div>
   <div id="towerQuiz" style="display:none">
@@ -752,7 +752,7 @@ function renderTower(){
   document.getElementById('towerBest').textContent=`最高纪录: 第 ${S.towerBest} 层`;
 }
 function startTower(){
-  const floor=S.towerCurrent+1;const ts={qs:[],cur:0,ok:0,floor};
+  const floor=S.towerCurrent+1;const ts={qs:[],cur:0,ok:0,wrong:0,floor};
   towerMaxTime=20;
   for(let i=0;i<20;i++){
     let a,b;
@@ -771,7 +771,7 @@ function startTower(){
 }
 function showTowerQ(){
   const ts=window._ts,q=ts.qs[ts.cur];
-  document.getElementById('towerQProgress').textContent=`第${ts.floor}层 · ${ts.cur+1}/20`;
+  document.getElementById('towerQProgress').textContent=`第${ts.floor}层 · 第${ts.cur+1}题 · 对${ts.ok}/15 · 错${ts.wrong}/5`;
   document.getElementById('towerBar').style.width=`${(ts.cur/20)*100}%`;
   document.getElementById('towerQuestion').textContent=`${q.a} × ${q.b} = ?`;
   document.getElementById('towerOptions').innerHTML=q.opts.map(o=>`<button class="quiz-opt" onclick="chkTower(this,${o})">${o}</button>`).join('');
@@ -806,14 +806,21 @@ function towerTimeout(){
   // Show correct answer
   const q=ts.qs[ts.cur];
   document.querySelectorAll('#towerOptions .quiz-opt').forEach(b=>{if(+b.textContent===q.ans)b.classList.add('correct')});
-  setTimeout(()=>{ts.cur++;ts.cur<20?showTowerQ():finTower()},800);
+  setTimeout(()=>{ts.wrong++;towerNext()},800);
 }
 function chkTower(el,v){
   clearInterval(towerTimer);
   const ts=window._ts,q=ts.qs[ts.cur];
   document.querySelectorAll('#towerOptions .quiz-opt').forEach(b=>b.disabled=true);
-  if(v===q.ans){el.classList.add('correct');ts.ok++}else{el.classList.add('wrong');document.querySelectorAll('#towerOptions .quiz-opt').forEach(b=>{if(+b.textContent===q.ans)b.classList.add('correct')})}
-  setTimeout(()=>{ts.cur++;ts.cur<20?showTowerQ():finTower()},500);
+  if(v===q.ans){el.classList.add('correct');ts.ok++}else{el.classList.add('wrong');ts.wrong++;document.querySelectorAll('#towerOptions .quiz-opt').forEach(b=>{if(+b.textContent===q.ans)b.classList.add('correct')})}
+  setTimeout(towerNext,500);
+}
+function towerNext(){
+  const ts=window._ts;
+  if(ts.ok>=15){finTower();return;}
+  if(ts.wrong>=5){finTower();return;}
+  ts.cur++;
+  if(ts.cur<20)showTowerQ();else finTower();
 }
 function finTower(){
   clearInterval(towerTimer);
@@ -825,8 +832,8 @@ function finTower(){
     const unlockFloor=Math.floor(ts.floor/10)*10;
     const unlock=TOWER_CATS.find(c=>c.floor===unlockFloor);
     if(unlock&&!S.unlocked.includes(unlock.id)){S.unlocked.push(unlock.id);toast(`🎉 解锁新品种：${unlock.breed}！`)}
-    toast(`通关！答对${ts.ok}/20 🎉`);
-  }else{toast(`挑战失败！答对${ts.ok}/20，需15题 😢 本层再来一次`)}
+    toast(`通关！答对${ts.ok}题（满15即过）🎉`);
+  }else{toast(`挑战失败！错${ts.wrong}题（满5即败）😢 本层再来一次`)}
   save();render();renderTower();
 }
 function closeTowerModal(){
