@@ -367,7 +367,7 @@ body{-webkit-overflow-scrolling:touch}
     🔢 <span class="highlight">10以内乘法 ×10</span> → 送 1 份水<br>
     🧮 <span class="highlight">19以内乘法 ×10</span> → 送 1 份猫条
   </p></div>
-  <div class="guide-section"><h3>🗼 爬塔挑战</h3><p>19 以内乘法 20 题速算<br>每题<span class="highlight">限时倒计时</span>⏳ 层数越高时间越短<br>由易到难共 <span class="highlight">100 层</span><br>答对 ≥15 题通关<br>每 10 层解锁一只<span class="highlight">稀有猫咪</span>🐱<br>层数越高猫咪越好看！</p></div>
+  <div class="guide-section"><h3>🗼 爬塔挑战</h3><p>19 以内乘法 20 题速算<br>每题<span class="highlight">限时20秒</span>⏳<br>由易到难共 <span class="highlight">100 层</span><br>答对 ≥15 题通关<br>每 10 层解锁一只<span class="highlight">稀有猫咪</span>🐱<br>层数越高猫咪越好看！</p></div>
   <div class="guide-section"><h3>🐱 猫咪图鉴</h3><p>4 只初始猫咪 + 10 只爬塔解锁猫咪<br>点击可查看详情并<span class="highlight">切换形象</span><br>快去爬塔收集全部吧！✨</p></div>
 </div></div>
 
@@ -385,7 +385,7 @@ body{-webkit-overflow-scrolling:touch}
   <div id="towerMain" class="tower-info">
     <div class="tower-floor-num" id="towerFloor">第 1 层</div>
     <div class="tower-best" id="towerBest">最高纪录: 第 1 层</div>
-    <div class="tower-desc">20道乘法速算 · 每题10秒⏳<br>层数越高数字越大 · 答对 ≥15 题通关<br>每10层解锁新品种猫咪</div>
+    <div class="tower-desc">20道乘法速算 · 每题20秒⏳<br>层数越高数字越大 · 答对 ≥15 题通关<br>每10层解锁新品种猫咪</div>
     <button class="btn btn-gold" onclick="startTower()">开始挑战 ⚔️</button>
   </div>
   <div id="towerQuiz" style="display:none">
@@ -397,7 +397,7 @@ body{-webkit-overflow-scrolling:touch}
           <circle class="bg" cx="28" cy="28" r="24"/>
           <circle class="fg" id="timerCircle" cx="28" cy="28" r="24" stroke-dasharray="150.8" stroke-dashoffset="0"/>
         </svg>
-        <div class="tower-timer-num" id="timerNum">10</div>
+        <div class="tower-timer-num" id="timerNum">20</div>
       </div>
     </div>
     <div class="quiz-question" id="towerQuestion"></div>
@@ -444,12 +444,12 @@ const MOODS={
 };
 
 // ===== STATE =====
-let S={started:false,cat:{name:'',type:'orange'},level:1,growth:0,food:0,water:0,treats:0,baths:0,daily:{checkin:false,quiz24:0,quizMul10:0,quizMul19:0},towerBest:0,towerCurrent:0,unlocked:['orange','black','white','grey'],activeCat:'orange',lastDate:''};
+let S={started:false,cat:{name:'',type:'orange'},level:1,growth:0,food:0,water:0,treats:0,baths:0,daily:{checkin:false,quiz24:0,quizMul10:0,quizMul19:0},quiz24State:null,quizMulState:null,towerBest:0,towerCurrent:0,unlocked:['orange','black','white','grey'],activeCat:'orange',lastDate:''};
 function load(){try{const s=localStorage.getItem('catGame2');if(s)S=JSON.parse(s)}catch(e){}}
 function save(){try{localStorage.setItem('catGame2',JSON.stringify(S))}catch(e){}}
 load();
 
-function checkDay(){const t=new Date().toLocaleDateString();if(S.lastDate!==t){S.daily={checkin:false,quiz24:0,quizMul10:0,quizMul19:0};S.lastDate=t;save()}}
+function checkDay(){const t=new Date().toLocaleDateString();if(S.lastDate!==t){S.daily={checkin:false,quiz24:0,quizMul10:0,quizMul19:0};S.quiz24State=null;S.quizMulState=null;S.lastDate=t;save()}}
 
 // ===== CAT HTML =====
 function makeCatHTML(theme,stage=1,crowned=false){
@@ -586,12 +586,20 @@ function doCheckIn(){if(S.daily.checkin){toast('今天已签到~');return}S.dail
 // ===== MULTIPLICATION QUIZ =====
 let MQ={qs:[],cur:0,ok:0,mode:10};
 function startMul(mode){
-  MQ={qs:[],cur:0,ok:0,mode};
-  for(let i=0;i<10;i++){
-    let a,b;
-    if(mode===10){a=r(2,9);b=r(2,9)}else{a=r(2,18);b=r(2,18)}
-    MQ.qs.push({a,b,ans:a*b,opts:genOpts(a*b,4)});
+  if(S.daily['quizMul'+mode]>=10){toast('今天该任务已完成~');return}
+  // 恢复上次未完成的进度，避免退出后从第一题重来
+  if(S.quizMulState && S.quizMulState.mode===mode && S.quizMulState.cur<10){
+    MQ={qs:S.quizMulState.qs,cur:S.quizMulState.cur,ok:S.quizMulState.ok,mode};
+  }else{
+    MQ={qs:[],cur:0,ok:0,mode};
+    for(let i=0;i<10;i++){
+      let a,b;
+      if(mode===10){a=r(2,9);b=r(2,9)}else{a=r(2,18);b=r(2,18)}
+      MQ.qs.push({a,b,ans:a*b,opts:genOpts(a*b,4)});
+    }
+    S.quizMulState={qs:MQ.qs,cur:0,ok:0,mode};
   }
+  save();
   document.getElementById('quizTitle').textContent=mode===10?'10以内乘法':'19以内乘法';
   showMulQ();openModal('quizModal');
 }
@@ -606,27 +614,34 @@ function showMulQ(){
 }
 function chkMul(el,v){
   const q=MQ.qs[MQ.cur];document.querySelectorAll('#quizOptions .quiz-opt').forEach(b=>b.disabled=true);
-  if(v===q.ans){el.classList.add('correct');MQ.ok++}else{el.classList.add('wrong');document.querySelectorAll('#quizOptions .quiz-opt').forEach(b=>{if(+b.textContent===q.ans)b.classList.add('correct')})}
-  setTimeout(()=>{MQ.cur++;MQ.cur<MQ.qs.length?showMulQ():finMul()},700);
+  if(v===q.ans){el.classList.add('correct');MQ.ok++;S.daily['quizMul'+MQ.mode]++;save()}
+  else{el.classList.add('wrong');document.querySelectorAll('#quizOptions .quiz-opt').forEach(b=>{if(+b.textContent===q.ans)b.classList.add('correct')})}
+  setTimeout(()=>{MQ.cur++;if(MQ.cur<MQ.qs.length){S.quizMulState={qs:MQ.qs,cur:MQ.cur,ok:MQ.ok,mode:MQ.mode};save();showMulQ()}else finMul()},700);
 }
 function finMul(){
   closeQuizModal();
   const{mode,ok}=MQ;
-  if(mode===10){S.daily.quizMul10+=ok;if(S.daily.quizMul10>=10&&S.daily.quizMul10-ok<10){S.water++;toast(`答对${ok}题！获得水 💧`)}else toast(`答对${ok}题！还需${Math.max(0,10-S.daily.quizMul10)}题`)}
-  else{S.daily.quizMul19+=ok;if(S.daily.quizMul19>=10&&S.daily.quizMul19-ok<10){S.treats++;toast(`答对${ok}题！获得猫条 🧶`)}else toast(`答对${ok}题！还需${Math.max(0,10-S.daily.quizMul19)}题`)}
-  save();render();
+  const key='quizMul'+mode;
+  // ok 已在每题答对时累加到 S.daily[key]；这里判断是否在本组跨过 10 题门槛发奖励
+  if(S.daily[key]>=10 && S.daily[key]-ok<10){
+    if(mode===10)toast(`答对${ok}题！获得水 💧`);else toast(`答对${ok}题！获得猫条 🧶`);
+  }else{toast(`答对${ok}题！还需${Math.max(0,10-S.daily[key])}题`)}
+  S.quizMulState=null;save();render();
 }
 function closeQuizModal(){closeModal('quizModal')}
 
 // ===== 24 POINT =====
 // 24-point solver: returns true if nums can make 24
+// 24点求解：仅允许整数运算（除法必须能整除），从而排除“必须用小数/分数才能解”的题目
 function can24(arr){
-  if(arr.length===1)return Math.abs(arr[0]-24)<0.001;
+  if(arr.length===1)return arr[0]===24;
   for(let i=0;i<arr.length;i++)for(let j=i+1;j<arr.length;j++){
     const rest=arr.filter((_,k)=>k!==i&&k!==j);
     const a=arr[i],b=arr[j];
-    for(const v of[a+b,a-b,b-a,a*b,b!==0?a/b:NaN,a!==0?b/a:NaN]){
-      if(isNaN(v)||!isFinite(v))continue;
+    const cands=[a+b,a-b,b-a,a*b];
+    if(b!==0&&a%b===0)cands.push(a/b);
+    if(a!==0&&b%a===0)cands.push(b/a);
+    for(const v of cands){
       if(can24([v,...rest]))return true;
     }
   }
@@ -645,8 +660,15 @@ function gen24Set(){
 let P24={sets:[],cur:0,ok:0,usedNums:[],expr:[]};
 function startQuiz24(){
   if(S.daily.quiz24>=5){toast('今天24点已完成~');return}
-  P24={sets:[],cur:0,ok:0,usedNums:[],expr:[]};
-  for(let i=0;i<5;i++)P24.sets.push(gen24Set());
+  // 恢复上次未完成的进度，避免退出后从第一题重来
+  if(S.quiz24State && S.quiz24State.cur<5){
+    P24={sets:S.quiz24State.sets,cur:S.quiz24State.cur,ok:S.quiz24State.ok,usedNums:[],expr:[]};
+  }else{
+    P24={sets:[],cur:0,ok:0,usedNums:[],expr:[]};
+    for(let i=0;i<5;i++)P24.sets.push(gen24Set());
+    S.quiz24State={sets:P24.sets,cur:0,ok:0};
+  }
+  save();
   show24Q();openModal('quiz24Modal');
 }
 function show24Q(){
@@ -708,14 +730,14 @@ function submit24(){
       P24.ok++;S.daily.quiz24++;
       if(S.daily.quiz24===5){S.food++;toast('完成5道24点！获得猫粮 🐟')}
       save();render();
-      setTimeout(()=>{P24.cur++;P24.cur<5?show24Q():(closeModal('quiz24Modal'),toast(`24点结束！答对${P24.ok}/5`))},1000);
+      setTimeout(()=>{P24.cur++;if(P24.cur<5){S.quiz24State={sets:P24.sets,cur:P24.cur,ok:P24.ok};save();show24Q()}else{closeModal('quiz24Modal');S.quiz24State=null;save();toast(`24点结束！答对${P24.ok}/5`)}},1000);
     }else{document.getElementById('p24Result').innerHTML=`<span style="color:var(--danger)">❌ = ${Number.isInteger(res)?res:res.toFixed(2)}，不是24哦</span>`}
   }catch(e){document.getElementById('p24Result').innerHTML='<span style="color:var(--danger)">⚠️ 表达式不完整</span>'}
 }
 
 // ===== TOWER =====
 const CIRC=150.8; // 2*PI*24
-let towerTimer=null,towerTimeLeft=0,towerMaxTime=10;
+let towerTimer=null,towerTimeLeft=0,towerMaxTime=20;
 
 function renderTower(){
   document.getElementById('towerFloor').textContent=`第 ${S.towerCurrent+1} 层`;
@@ -723,7 +745,7 @@ function renderTower(){
 }
 function startTower(){
   const floor=S.towerCurrent+1;const ts={qs:[],cur:0,ok:0,floor};
-  towerMaxTime=10;
+  towerMaxTime=20;
   for(let i=0;i<20;i++){
     let a,b;
     if(floor<=10){a=r(2,9);b=r(2,9)}
@@ -850,3 +872,4 @@ if(S.started){showScreen('game');render()}else initPicker();
 </script>
 </body>
 </html>
+
