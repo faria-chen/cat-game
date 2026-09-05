@@ -598,9 +598,15 @@ let MQ={qs:[],cur:0,ok:0,mode:10};
 function startMul(mode){
   if(S.daily['quizMul'+mode]>=10){toast('今天该任务已完成~');return}
   MQ={qs:[],cur:0,ok:0,mode};
+  let prevPair=null;
   for(let i=0;i<10;i++){
-    let a,b;
-    if(mode===10){a=r(2,9);b=r(2,9)}else{a=r(2,18);b=r(2,18)}
+    let a,b,x,y,pair,tries=0;
+    do{
+      if(mode===10){a=r(2,9);b=r(2,9)}else{a=r(2,18);b=r(2,18)}
+      x=Math.min(a,b);y=Math.max(a,b);pair=x+'x'+y;
+      tries++;
+    }while(prevPair===pair&&tries<50);
+    prevPair=pair;
     MQ.qs.push({a,b,ans:a*b,opts:genOpts(a*b,4)});
   }
   // 退出重进：进度(题数)保持不变，但题目重新随机——给玩家一个换掉做不出题目的后门
@@ -754,14 +760,20 @@ function renderTower(){
 function startTower(){
   const floor=S.towerCurrent+1;const ts={qs:[],cur:0,ok:0,wrong:0,floor};
   towerMaxTime=20;
+  let prevPair=null;
   for(let i=0;i<20;i++){
-    let a,b;
-    if(floor<=10){a=r(2,9);b=r(2,9)}
-    else if(floor<=30){a=r(2,12);b=r(2,12)}
-    else if(floor<=50){a=r(2,15);b=r(3,15)}
-    else if(floor<=70){a=r(3,18);b=r(3,18)}
-    else if(floor<=90){a=r(5,19);b=r(5,19)}
-    else{a=r(7,19);b=r(7,19)}
+    let a,b,x,y,pair,tries=0;
+    do{
+      if(floor<=10){a=r(2,9);b=r(2,9)}
+      else if(floor<=30){a=r(2,12);b=r(2,12)}
+      else if(floor<=50){a=r(2,15);b=r(3,15)}
+      else if(floor<=70){a=r(3,18);b=r(3,18)}
+      else if(floor<=90){a=r(5,19);b=r(5,19)}
+      else{a=r(7,19);b=r(7,19)}
+      x=Math.min(a,b);y=Math.max(a,b);pair=x+'x'+y;
+      tries++;
+    }while(prevPair===pair&&tries<50);
+    prevPair=pair;
     ts.qs.push({a,b,ans:a*b,opts:genOpts(a*b,4)});
   }
   window._ts=ts;
