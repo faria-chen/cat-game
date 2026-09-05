@@ -587,18 +587,17 @@ function doCheckIn(){if(S.daily.checkin){toast('今天已签到~');return}S.dail
 let MQ={qs:[],cur:0,ok:0,mode:10};
 function startMul(mode){
   if(S.daily['quizMul'+mode]>=10){toast('今天该任务已完成~');return}
-  // 恢复上次未完成的进度，避免退出后从第一题重来
-  if(S.quizMulState && S.quizMulState.mode===mode && S.quizMulState.cur<10){
-    MQ={qs:S.quizMulState.qs,cur:S.quizMulState.cur,ok:S.quizMulState.ok,mode};
-  }else{
-    MQ={qs:[],cur:0,ok:0,mode};
-    for(let i=0;i<10;i++){
-      let a,b;
-      if(mode===10){a=r(2,9);b=r(2,9)}else{a=r(2,18);b=r(2,18)}
-      MQ.qs.push({a,b,ans:a*b,opts:genOpts(a*b,4)});
-    }
-    S.quizMulState={qs:MQ.qs,cur:0,ok:0,mode};
+  MQ={qs:[],cur:0,ok:0,mode};
+  for(let i=0;i<10;i++){
+    let a,b;
+    if(mode===10){a=r(2,9);b=r(2,9)}else{a=r(2,18);b=r(2,18)}
+    MQ.qs.push({a,b,ans:a*b,opts:genOpts(a*b,4)});
   }
+  // 退出重进：进度(题数)保持不变，但题目重新随机——给玩家一个换掉做不出题目的后门
+  if(S.quizMulState && S.quizMulState.mode===mode && S.quizMulState.cur<10){
+    MQ.cur=S.quizMulState.cur;MQ.ok=S.quizMulState.ok;
+  }
+  S.quizMulState={mode:MQ.mode,cur:MQ.cur,ok:MQ.ok};
   save();
   document.getElementById('quizTitle').textContent=mode===10?'10以内乘法':'19以内乘法';
   showMulQ();openModal('quizModal');
@@ -616,7 +615,7 @@ function chkMul(el,v){
   const q=MQ.qs[MQ.cur];document.querySelectorAll('#quizOptions .quiz-opt').forEach(b=>b.disabled=true);
   if(v===q.ans){el.classList.add('correct');MQ.ok++;S.daily['quizMul'+MQ.mode]++;save()}
   else{el.classList.add('wrong');document.querySelectorAll('#quizOptions .quiz-opt').forEach(b=>{if(+b.textContent===q.ans)b.classList.add('correct')})}
-  setTimeout(()=>{MQ.cur++;if(MQ.cur<MQ.qs.length){S.quizMulState={qs:MQ.qs,cur:MQ.cur,ok:MQ.ok,mode:MQ.mode};save();showMulQ()}else finMul()},700);
+  setTimeout(()=>{MQ.cur++;if(MQ.cur<MQ.qs.length){S.quizMulState={mode:MQ.mode,cur:MQ.cur,ok:MQ.ok};save();showMulQ()}else finMul()},700);
 }
 function finMul(){
   closeQuizModal();
@@ -660,14 +659,13 @@ function gen24Set(){
 let P24={sets:[],cur:0,ok:0,usedNums:[],expr:[]};
 function startQuiz24(){
   if(S.daily.quiz24>=5){toast('今天24点已完成~');return}
-  // 恢复上次未完成的进度，避免退出后从第一题重来
+  P24={sets:[],cur:0,ok:0,usedNums:[],expr:[]};
+  for(let i=0;i<5;i++)P24.sets.push(gen24Set());
+  // 退出重进：进度(题数)保持不变，但题目重新随机——给玩家一个换掉做不出题目的后门
   if(S.quiz24State && S.quiz24State.cur<5){
-    P24={sets:S.quiz24State.sets,cur:S.quiz24State.cur,ok:S.quiz24State.ok,usedNums:[],expr:[]};
-  }else{
-    P24={sets:[],cur:0,ok:0,usedNums:[],expr:[]};
-    for(let i=0;i<5;i++)P24.sets.push(gen24Set());
-    S.quiz24State={sets:P24.sets,cur:0,ok:0};
+    P24.cur=S.quiz24State.cur;P24.ok=S.quiz24State.ok;
   }
+  S.quiz24State={cur:P24.cur,ok:P24.ok};
   save();
   show24Q();openModal('quiz24Modal');
 }
@@ -730,7 +728,7 @@ function submit24(){
       P24.ok++;S.daily.quiz24++;
       if(S.daily.quiz24===5){S.food++;toast('完成5道24点！获得猫粮 🐟')}
       save();render();
-      setTimeout(()=>{P24.cur++;if(P24.cur<5){S.quiz24State={sets:P24.sets,cur:P24.cur,ok:P24.ok};save();show24Q()}else{closeModal('quiz24Modal');S.quiz24State=null;save();toast(`24点结束！答对${P24.ok}/5`)}},1000);
+      setTimeout(()=>{P24.cur++;if(P24.cur<5){S.quiz24State={cur:P24.cur,ok:P24.ok};save();show24Q()}else{closeModal('quiz24Modal');S.quiz24State=null;save();toast(`24点结束！答对${P24.ok}/5`)}},1000);
     }else{document.getElementById('p24Result').innerHTML=`<span style="color:var(--danger)">❌ = ${Number.isInteger(res)?res:res.toFixed(2)}，不是24哦</span>`}
   }catch(e){document.getElementById('p24Result').innerHTML='<span style="color:var(--danger)">⚠️ 表达式不完整</span>'}
 }
